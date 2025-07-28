@@ -254,11 +254,9 @@ class PostFetcher {
             time: new Date(post.timestamp || Date.now()).toTimeString().split(' ')[0]
         };
 
-        // Update the preview with this data
+                // Update the preview with this data
         if (window.postGenerator) {
-            console.log('Calling generatePreview with data:', postData);
             const previewHTML = window.postGenerator.generatePreview(postData);
-            console.log('Generated preview HTML:', previewHTML);
 
             const previewElement = document.getElementById('post-preview');
             if (previewElement) {
@@ -274,11 +272,7 @@ class PostFetcher {
                     previewElement.classList.remove('dark', 'light');
                     previewElement.classList.add(exportTheme);
                 }, 10);
-            } else {
-                console.error('Preview element not found');
             }
-        } else {
-            console.error('postGenerator not found');
         }
     }
 
