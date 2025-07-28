@@ -71,31 +71,33 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
 
 4. **Export your images** in light or dark mode!
 
+**Note**: For full Bluesky API integration, deploy to Cloudflare Workers using `npx wrangler deploy`
+
 ### Deployment
 
-#### Cloudflare Pages (Recommended)
+#### Cloudflare Workers (Recommended)
 
-1. **Push to GitHub**
+1. **Deploy with one command**
    ```bash
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
+   npx wrangler deploy
    ```
 
-2. **Deploy to Cloudflare Pages**
-   - Go to [Cloudflare Pages](https://pages.cloudflare.com/)
-   - Connect your GitHub repository
-   - Set build settings:
-     - Build command: (leave empty)
-     - Build output directory: `.`
-   - Deploy!
+2. **Your app will be available** at `https://bluesky-skeetgen.your-subdomain.workers.dev`
+
+3. **Features included**:
+   - Static site hosting
+   - Real Bluesky API integration
+   - No CORS issues (everything on same domain)
 
 #### Other Hosting Options
 
+- **Cloudflare Pages**: For static-only deployment (no API features)
 - **Netlify**: Drag and drop the folder or connect to Git
 - **Vercel**: Import repository and deploy
 - **GitHub Pages**: Enable in repository settings
 - **Any static hosting**: Upload files to any web server
+
+**Note**: Only Cloudflare Workers deployment includes the full Bluesky API integration
 
 ## Usage Guide
 
@@ -183,7 +185,7 @@ bluesky-skeetgen/
 │   │   ├── export-handler.js       # PNG export functionality
 │   │   └── post-fetcher.js         # Bluesky API integration & post selection
 │   └── assets/                     # Images and assets
-├── api-worker.js                   # Cloudflare Worker for Bluesky API proxy
+├── api-worker.js                   # Cloudflare Worker (serves static assets + API)
 ├── wrangler.toml                   # Cloudflare Workers config
 ├── DEPLOYMENT.md                   # Deployment guide
 └── README.md                       # Project documentation
@@ -194,6 +196,7 @@ bluesky-skeetgen/
 - **Tailwind CSS** (CDN): Styling framework
 - **html2canvas** (CDN): PNG export functionality
 - **Vanilla JavaScript**: No build process required
+- **Cloudflare Workers**: For API integration and static asset serving
 
 ### Browser Support
 
@@ -207,6 +210,8 @@ bluesky-skeetgen/
 - **Bundle Size**: < 50KB (minified)
 - **Load Time**: < 1 second
 - **Export Time**: 2-5 seconds depending on content
+- **API Response**: < 500ms for Bluesky API calls
+- **Edge Computing**: Global CDN for fast worldwide access
 
 ## Contributing
 
