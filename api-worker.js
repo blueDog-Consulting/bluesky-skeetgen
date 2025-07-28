@@ -149,14 +149,14 @@ async function serveStaticAssets(request, url, corsHeaders) {
   }
 }
 
-// Fetch posts by Bluesky handle
+// Fetch posts by Bluesky handle using public API
 async function fetchPostsByHandle(handle) {
   try {
     // Clean the handle (remove @ if present)
     const cleanHandle = handle.startsWith('@') ? handle.slice(1) : handle;
 
-    // Bluesky API endpoint for getting posts
-    const apiUrl = `https://bsky.social/xrpc/app.bsky.feed.getAuthorFeed?actor=${cleanHandle}&limit=20`;
+    // Public Bluesky API endpoint for getting posts
+    const apiUrl = `https://api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${cleanHandle}&limit=20`;
 
     const response = await fetch(apiUrl, {
       headers: {
@@ -204,7 +204,7 @@ async function fetchPostsByHandle(handle) {
   }
 }
 
-// Fetch specific post by URL
+// Fetch specific post by URL using public API
 async function fetchPostByUrl(postUrl) {
   try {
     // Extract post URI from URL
@@ -221,8 +221,8 @@ async function fetchPostByUrl(postUrl) {
       throw new Error('Could not extract handle from URL');
     }
 
-    // Bluesky API endpoint for getting specific post
-    const apiUrl = `https://bsky.social/xrpc/app.bsky.feed.getPostThread?uri=at://${handle}/app.bsky.feed.post/${postId}`;
+    // Public Bluesky API endpoint for getting specific post
+    const apiUrl = `https://api.bsky.app/xrpc/app.bsky.feed.getPostThread?uri=at://${handle}/app.bsky.feed.post/${postId}`;
 
     const response = await fetch(apiUrl, {
       headers: {

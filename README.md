@@ -86,7 +86,7 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
 
 3. **Features included**:
    - Static site hosting
-   - Real Bluesky API integration
+   - Real Bluesky API integration (using [api.bsky.app](https://api.bsky.app))
    - No CORS issues (everything on same domain)
 
 #### Other Hosting Options
@@ -210,7 +210,7 @@ bluesky-skeetgen/
 - **Bundle Size**: < 50KB (minified)
 - **Load Time**: < 1 second
 - **Export Time**: 2-5 seconds depending on content
-- **API Response**: < 500ms for Bluesky API calls
+- **API Response**: < 500ms for Bluesky API calls (via [api.bsky.app](https://api.bsky.app))
 - **Edge Computing**: Global CDN for fast worldwide access
 
 ## Contributing
@@ -237,7 +237,7 @@ We welcome contributions! Here's how to get started:
 
 ### Feature Ideas
 
-- [x] Real Bluesky API integration for live post fetching
+- [x] Real Bluesky API integration for live post fetching (using [api.bsky.app](https://api.bsky.app))
 - [ ] Add more post types (quote posts, polls)
 - [ ] Custom themes and color schemes
 - [ ] Batch export multiple posts
