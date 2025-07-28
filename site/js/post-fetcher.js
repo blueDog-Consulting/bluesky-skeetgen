@@ -238,25 +238,28 @@ class PostFetcher {
         this.showSuccess('Post selected! You can now export the image.');
     }
 
-        populateExistingPostPreview(post) {
+                populateExistingPostPreview(post) {
         // Create a data object for the existing post
         const postData = {
             postType: post.isRepost ? 'repost' : post.isReply ? 'reply' : 'post',
-            displayName: post.author,
-            handle: `@${post.handle}`,
+            displayName: post.author || 'Unknown User',
+            handle: `@${post.handle || 'unknown.bsky.social'}`,
             avatar: post.avatar || '',
-            content: post.text,
+            content: post.text || '',
             postImage: post.images && post.images.length > 0 ? post.images[0] : '',
-            reposts: post.reposts,
-            likes: post.likes,
-            replies: post.replies,
-            date: new Date(post.timestamp).toISOString().split('T')[0],
-            time: new Date(post.timestamp).toTimeString().split(' ')[0]
+            reposts: post.reposts || 0,
+            likes: post.likes || 0,
+            replies: post.replies || 0,
+            date: new Date(post.timestamp || Date.now()).toISOString().split('T')[0],
+            time: new Date(post.timestamp || Date.now()).toTimeString().split(' ')[0]
         };
 
         // Update the preview with this data
         if (window.postGenerator) {
+            console.log('Calling generatePreview with data:', postData);
             const previewHTML = window.postGenerator.generatePreview(postData);
+            console.log('Generated preview HTML:', previewHTML);
+
             const previewElement = document.getElementById('post-preview');
             if (previewElement) {
                 previewElement.innerHTML = previewHTML;
@@ -271,7 +274,11 @@ class PostFetcher {
                     previewElement.classList.remove('dark', 'light');
                     previewElement.classList.add(exportTheme);
                 }, 10);
+            } else {
+                console.error('Preview element not found');
             }
+        } else {
+            console.error('postGenerator not found');
         }
     }
 

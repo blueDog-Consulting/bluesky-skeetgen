@@ -9,15 +9,17 @@ class PostGenerator {
         this.generatePreview();
     }
 
-    generatePreview() {
+    generatePreview(data = null) {
         if (!this.previewContainer) return;
 
-        const formData = window.app.getFormData();
-        const postHTML = this.createPostHTML(formData);
+        // Use provided data or get from form
+        const postData = data || window.app.getFormData();
+        const postHTML = this.createPostHTML(postData);
         this.previewContainer.innerHTML = postHTML;
     }
 
     createPostHTML(data) {
+        console.log('createPostHTML called with data:', data);
         const { postType, displayName, handle, avatar, content, postImage, reposts, likes, replies, date, time } = data;
 
         let postHTML = '';
@@ -34,6 +36,7 @@ class PostGenerator {
                 break;
         }
 
+        console.log('Generated post HTML:', postHTML);
         return postHTML;
     }
 
