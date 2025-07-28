@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluesky Post Generator - Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">Bluesky Post Generator - Test Page</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Test Controls -->
+            <div class="space-y-4">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Test Controls</h2>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Display Name</label>
+                    <input type="text" id="test-display-name" value="Test User" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Handle</label>
+                    <input type="text" id="test-handle" value="@testuser.bsky.social" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Post Content</label>
+                    <textarea id="test-content" rows="3" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">This is a test post for the Bluesky Post Generator! 🚀</textarea>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Likes</label>
+                        <input type="number" id="test-likes" value="42" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reposts</label>
+                        <input type="number" id="test-reposts" value="12" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Replies</label>
+                        <input type="number" id="test-replies" value="8" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
+                </div>
+
+                <div class="flex space-x-4">
+                    <button id="test-update" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors">Update Preview</button>
+                    <button id="test-export" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors">Test Export</button>
+                    <button id="test-theme" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors">Toggle Theme</button>
+                </div>
+            </div>
+
+            <!-- Test Preview -->
+            <div>
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Test Preview</h2>
+                <div id="test-preview" class="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+                    <!-- Test post will be generated here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
+            <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">Test Results</h3>
+            <div id="test-results" class="text-sm text-blue-800 dark:text-blue-200">
+                Ready to test...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple test implementation
+        class TestApp {
+            constructor() {
+                this.isDarkMode = false;
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.updatePreview();
+            }
+
+            setupEventListeners() {
+                document.getElementById('test-update').addEventListener('click', () => this.updatePreview());
+                document.getElementById('test-export').addEventListener('click', () => this.testExport());
+                document.getElementById('test-theme').addEventListener('click', () => this.toggleTheme());
+
+                // Auto-update on input
+                ['test-display-name', 'test-handle', 'test-content', 'test-likes', 'test-reposts', 'test-replies'].forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.addEventListener('input', () => this.updatePreview());
+                    }
+                });
+            }
+
+            updatePreview() {
+                const preview = document.getElementById('test-preview');
+                const data = this.getTestData();
+
+                preview.innerHTML = this.createPostHTML(data);
+                this.updateTestResults('Preview updated successfully');
+            }
+
+            getTestData() {
+                return {
+                    displayName: document.getElementById('test-display-name').value || 'Test User',
+                    handle: document.getElementById('test-handle').value || '@testuser.bsky.social',
+                    content: document.getElementById('test-content').value || 'Test post',
+                    likes: parseInt(document.getElementById('test-likes').value || '0'),
+                    reposts: parseInt(document.getElementById('test-reposts').value || '0'),
+                    replies: parseInt(document.getElementById('test-replies').value || '0'),
+                    date: new Date().toISOString().split('T')[0],
+                    time: new Date().toTimeString().slice(0, 5)
+                };
+            }
+
+            createPostHTML(data) {
+                return `
+                    <div class="post-container">
+                        <div class="post-header">
+                            <div class="post-avatar">
+                                <span>👤</span>
+                            </div>
+                            <div class="post-user-info">
+                                <div class="post-display-name">${this.escapeHtml(data.displayName)}</div>
+                                <div class="post-handle">${this.escapeHtml(data.handle)}</div>
+                                <div class="post-timestamp">now</div>
+                            </div>
+                        </div>
+
+                        <div class="post-content">${this.formatContent(data.content)}</div>
+
+                        <div class="post-actions">
+                            <div class="post-metrics">
+                                <div class="post-metric">
+                                    <svg class="post-metric-icon" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M23.77 15.67c-.292-.293-.767-.293-1.06 0l-2.54 2.54V9.5c0-3.314-2.686-6-6-6s-6 2.686-6 6v8.71l-2.54-2.54c-.293-.293-.768-.293-1.06 0-.293.292-.293.767 0 1.06l3.88 3.88c.292.293.767.293 1.06 0l3.88-3.88c.293-.293.293-.768 0-1.06z"/>
+                                    </svg>
+                                    <span>${this.formatNumber(data.reposts)}</span>
+                                </div>
+                                <div class="post-metric">
+                                    <svg class="post-metric-icon" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                    </svg>
+                                    <span>${this.formatNumber(data.likes)}</span>
+                                </div>
+                                <div class="post-metric">
+                                    <svg class="post-metric-icon" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M14.046 2.242l-4.668-.01h-.016c-1.11 0-1.99.896-1.99 1.99v7.985c0 1.1.89 1.99 1.99 1.99h.016l4.668.01c1.11 0 1.99-.896 1.99-1.99V4.232c0-1.1-.89-1.99-1.99-1.99zM14.046 2.242l-4.668-.01h-.016c-1.11 0-1.99.896-1.99 1.99v7.985c0 1.1.89 1.99 1.99 1.99h.016l4.668.01c1.11 0 1.99-.896 1.99-1.99V4.232c0-1.1-.89-1.99-1.99-1.99z"/>
+                                    </svg>
+                                    <span>${this.formatNumber(data.replies)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            formatContent(content) {
+                const urlRegex = /(https?:\/\/[^\s]+)/g;
+                const formattedContent = content.replace(urlRegex, '<a href="$1" target="_blank" class="text-blue-500 hover:underline">$1</a>');
+                return formattedContent.replace(/\n/g, '<br>');
+            }
+
+            formatNumber(num) {
+                if (num >= 1000000) {
+                    return (num / 1000000).toFixed(1) + 'M';
+                } else if (num >= 1000) {
+                    return (num / 1000).toFixed(1) + 'K';
+                }
+                return num.toString();
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            async testExport() {
+                const preview = document.getElementById('test-preview');
+
+                try {
+                    this.updateTestResults('Starting export test...');
+
+                    const canvas = await html2canvas(preview, {
+                        backgroundColor: this.isDarkMode ? '#111827' : '#ffffff',
+                        scale: 2,
+                        useCORS: true,
+                        allowTaint: true
+                    });
+
+                    const blob = await new Promise(resolve => {
+                        canvas.toBlob(resolve, 'image/png', 0.9);
+                    });
+
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'test_bluesky_post.png';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+
+                    this.updateTestResults('Export test successful! Check downloads folder.');
+                } catch (error) {
+                    console.error('Export test failed:', error);
+                    this.updateTestResults('Export test failed: ' + error.message);
+                }
+            }
+
+            toggleTheme() {
+                this.isDarkMode = !this.isDarkMode;
+                if (this.isDarkMode) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+                this.updatePreview();
+                this.updateTestResults('Theme toggled to ' + (this.isDarkMode ? 'dark' : 'light') + ' mode');
+            }
+
+            updateTestResults(message) {
+                const results = document.getElementById('test-results');
+                const timestamp = new Date().toLocaleTimeString();
+                results.innerHTML = `<strong>${timestamp}:</strong> ${message}`;
+            }
+        }
+
+        // Initialize test app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.testApp = new TestApp();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# Cloudflare Pages configuration
+# This file is used for deployment to Cloudflare Pages
+
+# For static site deployment, no build command is needed
+# The site will be served directly from the root directory
+
+# Environment variables can be added here if needed
+# [env.production.vars]
+# API_URL = "https://api.example.com"
+
+# For Cloudflare Pages, the configuration is handled through the dashboard
+# This file serves as documentation for the deployment setup
