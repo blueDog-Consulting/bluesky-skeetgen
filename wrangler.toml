@@ -2,6 +2,9 @@
 name = "bluesky-skeetgen"
 compatibility_date = "2025-07-28"
 
+# Main worker script
+main = "api-worker.js"
+
 # Static assets configuration
 [assets]
 directory = "./site"

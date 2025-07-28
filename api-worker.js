@@ -1,4 +1,4 @@
-// Cloudflare Worker for Bluesky API integration
+// Cloudflare Worker for Bluesky Post Generator - handles both static assets and API routes
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -23,50 +23,13 @@ export default {
     };
 
     try {
-      // Route: Get posts by handle
-      if (path === '/api/posts' && request.method === 'GET') {
-        const handle = url.searchParams.get('handle');
-        if (!handle) {
-          return new Response(JSON.stringify({ error: 'Handle parameter is required' }), {
-            status: 400,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          });
-        }
-
-        const posts = await fetchPostsByHandle(handle);
-        return new Response(JSON.stringify(posts), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
+      // API Routes
+      if (path.startsWith('/api/')) {
+        return await handleApiRoutes(request, url, corsHeaders);
       }
 
-      // Route: Get specific post by URL
-      if (path === '/api/post' && request.method === 'GET') {
-        const postUrl = url.searchParams.get('url');
-        if (!postUrl) {
-          return new Response(JSON.stringify({ error: 'URL parameter is required' }), {
-            status: 400,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          });
-        }
-
-        const post = await fetchPostByUrl(postUrl);
-        return new Response(JSON.stringify(post), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-
-      // Route: Health check
-      if (path === '/api/health') {
-        return new Response(JSON.stringify({ status: 'ok', timestamp: new Date().toISOString() }), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-
-      // Default: Return 404
-      return new Response(JSON.stringify({ error: 'Not found' }), {
-        status: 404,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+      // Static Assets - serve from site directory
+      return await serveStaticAssets(request, url, corsHeaders);
 
     } catch (error) {
       console.error('Worker error:', error);
@@ -77,6 +40,114 @@ export default {
     }
   },
 };
+
+// Handle API routes
+async function handleApiRoutes(request, url, corsHeaders) {
+  const path = url.pathname;
+
+  // Route: Get posts by handle
+  if (path === '/api/posts' && request.method === 'GET') {
+    const handle = url.searchParams.get('handle');
+    if (!handle) {
+      return new Response(JSON.stringify({ error: 'Handle parameter is required' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const posts = await fetchPostsByHandle(handle);
+    return new Response(JSON.stringify(posts), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // Route: Get specific post by URL
+  if (path === '/api/post' && request.method === 'GET') {
+    const postUrl = url.searchParams.get('url');
+    if (!postUrl) {
+      return new Response(JSON.stringify({ error: 'URL parameter is required' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const post = await fetchPostByUrl(postUrl);
+    return new Response(JSON.stringify(post), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // Route: Health check
+  if (path === '/api/health') {
+    return new Response(JSON.stringify({ status: 'ok', timestamp: new Date().toISOString() }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // API route not found
+  return new Response(JSON.stringify({ error: 'API endpoint not found' }), {
+    status: 404,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+// Serve static assets
+async function serveStaticAssets(request, url, corsHeaders) {
+  const path = url.pathname;
+
+  // Default to index.html for root path
+  let filePath = path === '/' ? '/index.html' : path;
+
+  // Remove leading slash for asset lookup
+  filePath = filePath.startsWith('/') ? filePath.slice(1) : filePath;
+
+  // If no file extension, assume it's a route that should serve index.html
+  if (!filePath.includes('.')) {
+    filePath = 'index.html';
+  }
+
+  try {
+    // Try to fetch the asset from the site directory
+    const asset = await env.ASSETS.fetch(new Request(`https://fake-host/${filePath}`));
+
+    if (asset.status === 404) {
+      // If asset not found, serve index.html for SPA routing
+      const indexAsset = await env.ASSETS.fetch(new Request('https://fake-host/index.html'));
+      return new Response(indexAsset.body, {
+        status: 200,
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'text/html',
+        },
+      });
+    }
+
+    // Determine content type based on file extension
+    let contentType = 'text/plain';
+    if (filePath.endsWith('.html')) contentType = 'text/html';
+    else if (filePath.endsWith('.css')) contentType = 'text/css';
+    else if (filePath.endsWith('.js')) contentType = 'application/javascript';
+    else if (filePath.endsWith('.png')) contentType = 'image/png';
+    else if (filePath.endsWith('.jpg') || filePath.endsWith('.jpeg')) contentType = 'image/jpeg';
+    else if (filePath.endsWith('.gif')) contentType = 'image/gif';
+    else if (filePath.endsWith('.svg')) contentType = 'image/svg+xml';
+
+    return new Response(asset.body, {
+      status: 200,
+      headers: {
+        ...corsHeaders,
+        'Content-Type': contentType,
+      },
+    });
+
+  } catch (error) {
+    console.error('Error serving static asset:', error);
+    return new Response('Not found', {
+      status: 404,
+      headers: { ...corsHeaders, 'Content-Type': 'text/plain' },
+    });
+  }
+}
 
 // Fetch posts by Bluesky handle
 async function fetchPostsByHandle(handle) {
