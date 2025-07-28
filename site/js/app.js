@@ -124,7 +124,7 @@ class BlueskyPostGenerator {
             });
         }
 
-        // Export buttons
+                // Export buttons
         const exportBtn = document.getElementById('export-btn');
         const exportExistingBtn = document.getElementById('export-existing-btn');
 
@@ -143,6 +143,14 @@ class BlueskyPostGenerator {
                 }
             });
         }
+
+        // Export theme radio buttons
+        const exportThemeRadios = document.querySelectorAll('input[name="export-theme"], input[name="export-theme-existing"]');
+        exportThemeRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                this.updatePreviewWithTheme();
+            });
+        });
     }
 
     initializeDefaultValues() {
@@ -338,7 +346,7 @@ class BlueskyPostGenerator {
         }
     }
 
-    showInitialChoice() {
+        showInitialChoice() {
         const initialChoice = document.getElementById('initial-choice');
         const generateNewSection = document.getElementById('generate-new-section');
         const createFromExistingSection = document.getElementById('create-from-existing-section');
@@ -347,6 +355,32 @@ class BlueskyPostGenerator {
             initialChoice.classList.remove('hidden');
             generateNewSection.classList.add('hidden');
             createFromExistingSection.classList.add('hidden');
+        }
+    }
+
+    updatePreviewWithTheme() {
+        // Get the selected export theme
+        const exportTheme = document.querySelector('input[name="export-theme"]:checked')?.value ||
+                           document.querySelector('input[name="export-theme-existing"]:checked')?.value ||
+                           'light';
+
+        // Apply the selected theme to the preview container
+        const previewContainer = document.getElementById('post-preview');
+        if (previewContainer) {
+            // Remove existing theme classes
+            previewContainer.classList.remove('dark', 'light');
+
+            // Add the selected theme class
+            previewContainer.classList.add(exportTheme);
+
+            // Force a re-render by updating the preview content
+            this.updatePreview();
+
+            // Ensure the theme is applied after content update
+            setTimeout(() => {
+                previewContainer.classList.remove('dark', 'light');
+                previewContainer.classList.add(exportTheme);
+            }, 10);
         }
     }
 }

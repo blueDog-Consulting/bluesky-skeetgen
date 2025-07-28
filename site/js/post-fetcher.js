@@ -231,6 +231,17 @@ class PostFetcher {
             const previewElement = document.getElementById('post-preview');
             if (previewElement) {
                 previewElement.innerHTML = previewHTML;
+
+                // Apply the current export theme to the preview
+                const exportTheme = document.querySelector('input[name="export-theme-existing"]:checked')?.value || 'light';
+                previewElement.classList.remove('dark', 'light');
+                previewElement.classList.add(exportTheme);
+
+                // Force the theme to be applied
+                setTimeout(() => {
+                    previewElement.classList.remove('dark', 'light');
+                    previewElement.classList.add(exportTheme);
+                }, 10);
             }
         }
     }

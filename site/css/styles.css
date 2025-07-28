@@ -106,25 +106,52 @@
 }
 
 /* Dark mode styles */
-.dark .post-display-name {
+.dark .post-display-name,
+#post-preview.dark .post-display-name {
     color: #ffffff;
 }
 
-.dark .post-content {
+.dark .post-content,
+#post-preview.dark .post-content {
     color: #ffffff;
 }
 
-.dark .post-avatar {
+.dark .post-avatar,
+#post-preview.dark .post-avatar {
     background-color: #374151;
     color: #9ca3af;
 }
 
-.dark .post-image {
+.dark .post-image,
+#post-preview.dark .post-image {
     border-color: #374151;
 }
 
-.dark .post-actions {
+.dark .post-actions,
+#post-preview.dark .post-actions {
     border-top-color: #374151;
+}
+
+/* Light mode styles for preview */
+#post-preview.light .post-display-name {
+    color: #14171a;
+}
+
+#post-preview.light .post-content {
+    color: #14171a;
+}
+
+#post-preview.light .post-avatar {
+    background-color: #e1e8ed;
+    color: #657786;
+}
+
+#post-preview.light .post-image {
+    border-color: #e1e8ed;
+}
+
+#post-preview.light .post-actions {
+    border-top-color: #e1e8ed;
 }
 
 /* Repost styling */
@@ -136,9 +163,15 @@
     background-color: #f7f9fa;
 }
 
-.dark .repost-container {
+.dark .repost-container,
+#post-preview.dark .repost-container {
     border-color: #374151;
     background-color: #1f2937;
+}
+
+#post-preview.light .repost-container {
+    border-color: #e1e8ed;
+    background-color: #f7f9fa;
 }
 
 .repost-header {
@@ -211,6 +244,17 @@
 /* Animation for real-time updates */
 .post-preview {
     transition: all 0.2s ease-in-out;
+}
+
+/* Preview container theme backgrounds */
+#post-preview.light {
+    background-color: #ffffff !important;
+    border-color: #e1e8ed !important;
+}
+
+#post-preview.dark {
+    background-color: #1f2937 !important;
+    border-color: #374151 !important;
 }
 
 /* Custom scrollbar */
