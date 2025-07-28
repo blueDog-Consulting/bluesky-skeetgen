@@ -43,6 +43,36 @@ class BlueskyPostGenerator {
             themeToggle.addEventListener('click', () => this.toggleTheme());
         }
 
+        // Workflow choice buttons
+        const generateNewBtn = document.getElementById('generate-new-btn');
+        const createFromExistingBtn = document.getElementById('create-from-existing-btn');
+        const backToChoiceBtn = document.getElementById('back-to-choice');
+        const backToChoiceBtn2 = document.getElementById('back-to-choice-2');
+
+        if (generateNewBtn) {
+            generateNewBtn.addEventListener('click', () => {
+                this.showGenerateNewSection();
+            });
+        }
+
+        if (createFromExistingBtn) {
+            createFromExistingBtn.addEventListener('click', () => {
+                this.showCreateFromExistingSection();
+            });
+        }
+
+        if (backToChoiceBtn) {
+            backToChoiceBtn.addEventListener('click', () => {
+                this.showInitialChoice();
+            });
+        }
+
+        if (backToChoiceBtn2) {
+            backToChoiceBtn2.addEventListener('click', () => {
+                this.showInitialChoice();
+            });
+        }
+
         // Real-time preview updates
         const inputs = [
             'display-name',
@@ -91,6 +121,26 @@ class BlueskyPostGenerator {
         if (randomizeMetricsBtn) {
             randomizeMetricsBtn.addEventListener('click', () => {
                 this.randomizeMetrics();
+            });
+        }
+
+        // Export buttons
+        const exportBtn = document.getElementById('export-btn');
+        const exportExistingBtn = document.getElementById('export-existing-btn');
+
+        if (exportBtn) {
+            exportBtn.addEventListener('click', () => {
+                if (window.exportHandler) {
+                    window.exportHandler.exportAsPNG();
+                }
+            });
+        }
+
+        if (exportExistingBtn) {
+            exportExistingBtn.addEventListener('click', () => {
+                if (window.exportHandler) {
+                    window.exportHandler.exportAsPNG();
+                }
             });
         }
     }
@@ -241,10 +291,10 @@ class BlueskyPostGenerator {
         }
     }
 
-    showNotification(message, type = 'info') {
+        showNotification(message, type = 'info') {
         const notification = document.createElement('div');
         const bgColor = type === 'success' ? 'bg-green-500' :
-                       type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+                        type === 'error' ? 'bg-red-500' : 'bg-blue-500';
 
         notification.className = `fixed top-4 right-4 ${bgColor} text-white px-4 py-2 rounded-md shadow-lg z-50 transition-all duration-300 transform translate-x-full`;
         notification.textContent = message;
@@ -265,6 +315,39 @@ class BlueskyPostGenerator {
                 }
             }, 300);
         }, 3000);
+    }
+
+    // Workflow navigation methods
+    showGenerateNewSection() {
+        const initialChoice = document.getElementById('initial-choice');
+        const generateNewSection = document.getElementById('generate-new-section');
+
+        if (initialChoice && generateNewSection) {
+            initialChoice.classList.add('hidden');
+            generateNewSection.classList.remove('hidden');
+        }
+    }
+
+    showCreateFromExistingSection() {
+        const initialChoice = document.getElementById('initial-choice');
+        const createFromExistingSection = document.getElementById('create-from-existing-section');
+
+        if (initialChoice && createFromExistingSection) {
+            initialChoice.classList.add('hidden');
+            createFromExistingSection.classList.remove('hidden');
+        }
+    }
+
+    showInitialChoice() {
+        const initialChoice = document.getElementById('initial-choice');
+        const generateNewSection = document.getElementById('generate-new-section');
+        const createFromExistingSection = document.getElementById('create-from-existing-section');
+
+        if (initialChoice && generateNewSection && createFromExistingSection) {
+            initialChoice.classList.remove('hidden');
+            generateNewSection.classList.add('hidden');
+            createFromExistingSection.classList.add('hidden');
+        }
     }
 }
 

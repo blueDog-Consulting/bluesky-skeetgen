@@ -19,22 +19,42 @@ class ExportHandler {
 
     async exportAsPNG() {
         const exportBtn = document.getElementById('export-btn');
+        const exportExistingBtn = document.getElementById('export-existing-btn');
         const previewContainer = document.getElementById('post-preview');
 
-        if (!previewContainer || !exportBtn) return;
+        // Determine which button was clicked
+        const isExistingPost = exportExistingBtn && exportExistingBtn.disabled === false;
+        const activeBtn = isExistingPost ? exportExistingBtn : exportBtn;
+
+        if (!previewContainer || !activeBtn) return;
 
         try {
             // Show loading state
-            exportBtn.disabled = true;
-            exportBtn.classList.add('loading');
-            exportBtn.textContent = 'Generating...';
+            activeBtn.disabled = true;
+            activeBtn.classList.add('loading');
+            activeBtn.textContent = 'Generating...';
+
+            // Check which export theme is selected
+            const exportTheme = document.querySelector('input[name="export-theme"]:checked')?.value ||
+                               document.querySelector('input[name="export-theme-existing"]:checked')?.value ||
+                               'light';
 
             // Wait a bit for any pending DOM updates
             await new Promise(resolve => setTimeout(resolve, 100));
 
+            // Temporarily apply the selected theme for export
+            const originalTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            if (exportTheme !== originalTheme) {
+                if (exportTheme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+
             // Configure html2canvas options
             const options = {
-                backgroundColor: document.documentElement.classList.contains('dark') ? '#111827' : '#ffffff',
+                backgroundColor: exportTheme === 'dark' ? '#111827' : '#ffffff',
                 scale: 2, // Higher quality
                 useCORS: true,
                 allowTaint: true,
@@ -48,6 +68,15 @@ class ExportHandler {
 
             // Generate canvas
             const canvas = await html2canvas(previewContainer, options);
+
+            // Restore original theme
+            if (exportTheme !== originalTheme) {
+                if (originalTheme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
 
             // Convert to blob
             const blob = await new Promise(resolve => {
@@ -76,9 +105,9 @@ class ExportHandler {
             this.showError('Failed to export image. Please try again.');
         } finally {
             // Reset button state
-            exportBtn.disabled = false;
-            exportBtn.classList.remove('loading');
-            exportBtn.textContent = 'Export as PNG';
+            activeBtn.disabled = false;
+            activeBtn.classList.remove('loading');
+            activeBtn.textContent = 'Export as PNG';
         }
     }
 

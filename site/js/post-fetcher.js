@@ -196,27 +196,43 @@ class PostFetcher {
     }
 
     selectPost(post) {
-        // Populate the form with the selected post data
-        const displayNameInput = document.getElementById('display-name');
-        const handleInput = document.getElementById('handle');
-        const contentInput = document.getElementById('post-content');
-        const likesInput = document.getElementById('likes');
-        const repostsInput = document.getElementById('reposts');
-        const repliesInput = document.getElementById('replies');
+        // For the existing post workflow, we need to populate the preview directly
+        // since we don't have form fields in that section
+        this.populateExistingPostPreview(post);
 
-        if (displayNameInput) displayNameInput.value = post.author;
-        if (handleInput) handleInput.value = `@${post.author}`;
-        if (contentInput) contentInput.value = post.text;
-        if (likesInput) likesInput.value = post.likes;
-        if (repostsInput) repostsInput.value = post.reposts;
-        if (repliesInput) repliesInput.value = post.replies;
-
-        // Update preview
-        if (window.app) {
-            window.app.updatePreview();
+        // Show the export section
+        const existingPostExport = document.getElementById('existing-post-export');
+        if (existingPostExport) {
+            existingPostExport.classList.remove('hidden');
         }
 
-        this.showSuccess('Post selected! You can now customize and export.');
+        this.showSuccess('Post selected! You can now export the image.');
+    }
+
+    populateExistingPostPreview(post) {
+        // Create a data object for the existing post
+        const postData = {
+            postType: 'post',
+            displayName: post.author,
+            handle: `@${post.author}`,
+            avatar: '',
+            content: post.text,
+            postImage: '',
+            reposts: post.reposts,
+            likes: post.likes,
+            replies: post.replies,
+            date: new Date(post.timestamp).toISOString().split('T')[0],
+            time: new Date(post.timestamp).toTimeString().split(' ')[0]
+        };
+
+        // Update the preview with this data
+        if (window.postGenerator) {
+            const previewHTML = window.postGenerator.generatePreview(postData);
+            const previewElement = document.getElementById('post-preview');
+            if (previewElement) {
+                previewElement.innerHTML = previewHTML;
+            }
+        }
     }
 
     handleDirectUrl() {

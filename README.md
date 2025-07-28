@@ -4,15 +4,22 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
 
 ## Features
 
-### 🎨 **Post Customization**
+### 🎨 **Two Workflow Options**
+
+#### **🎨 Generate New Post Image**
 - **User Profile**: Customize display name, handle, and avatar
 - **Post Content**: Add text content with character counter (300 char limit)
 - **Images**: Upload custom images for both avatars and post content
 - **Post Types**: Support for regular posts, reposts, and replies
 - **Engagement Metrics**: Set custom repost, like, and reply counts with randomization
 - **Timestamps**: Customize date and time with smart formatting
+- **Theme Export**: Choose light or dark mode for the exported image
+
+#### **📱 Create from Existing Post**
 - **Social Handle Input**: Enter Bluesky handles to fetch real posts
 - **Post Selection**: Browse and select from fetched posts with pagination
+- **Direct URL Support**: Paste specific post URLs
+- **Theme Export**: Choose light or dark mode for the exported image
 
 ### 🎯 **Real-time Preview**
 - Live updates as you type
@@ -56,12 +63,11 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
    # Or simply open site/index.html in your browser
    ```
 
-3. **Start customizing!**
-   - Fill in the user profile details
-   - Add your post content
-   - Upload images if desired
-   - Set engagement metrics
-   - Export your post as PNG
+3. **Choose your workflow**:
+   - **🎨 Generate New Post Image**: Create custom posts from scratch
+   - **📱 Create from Existing Post**: Generate images from real Bluesky posts
+
+4. **Export your images** in light or dark mode!
 
 ### Deployment
 
@@ -91,7 +97,7 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
 
 ## Usage Guide
 
-### Creating a Post
+### 🎨 Generate New Post Image
 
 1. **Choose Post Type**
    - **Regular Post**: Standard Bluesky post
@@ -112,6 +118,7 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
    - **Reposts**: Number of reposts
    - **Likes**: Number of likes
    - **Replies**: Number of replies
+   - **🎲 Randomize**: Click to generate realistic metrics
 
 5. **Set Timestamp**
    - **Date**: When the post was made
@@ -119,16 +126,41 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
    - Smart formatting (e.g., "2h", "3d", "Jan 15")
 
 6. **Export**
+   - Choose **Light Mode** or **Dark Mode**
    - Click "Export as PNG" to download
    - Image includes all styling and content
    - Automatic filename generation
 
+### 📱 Create from Existing Post
+
+1. **Enter Bluesky Handle**
+   - Type a Bluesky handle (e.g., @username.bsky.social)
+   - Click "Fetch Posts" to load their posts
+   - Or paste a direct post URL
+
+2. **Select a Post**
+   - Browse through fetched posts with pagination
+   - Click on any post to select it
+   - Preview updates automatically
+
+3. **Export**
+   - Choose **Light Mode** or **Dark Mode**
+   - Click "Export as PNG" to download
+   - Image preserves the original post content and metrics
+
 ### Tips for Best Results
 
+#### For Custom Posts:
 - **Images**: Use square images for avatars, any aspect ratio for post images
 - **Content**: Keep posts under 300 characters for realism
-- **Metrics**: Use realistic numbers (e.g., 42 likes, 12 reposts)
+- **Metrics**: Use realistic numbers (e.g., 42 likes, 12 reposts) or click "🎲 Randomize"
 - **Timestamps**: Recent dates work best for engagement metrics
+
+#### For Existing Posts:
+- **Handles**: Enter the exact Bluesky handle (e.g., @username.bsky.social)
+- **URLs**: Use direct post URLs for specific posts
+- **Selection**: Browse through posts to find the perfect one
+- **Export**: Choose your preferred theme (light/dark) for the final image
 
 ## Technical Details
 
@@ -144,7 +176,8 @@ bluesky-skeetgen/
 │   │   ├── app.js                  # Main app logic & theme management
 │   │   ├── post-generator.js       # Post rendering engine
 │   │   ├── image-handler.js        # Image upload & processing
-│   │   └── export-handler.js       # PNG export functionality
+│   │   ├── export-handler.js       # PNG export functionality
+│   │   └── post-fetcher.js         # Bluesky API integration & post selection
 │   └── assets/                     # Images and assets
 ├── wrangler.toml                   # Cloudflare Workers config
 ├── DEPLOYMENT.md                   # Deployment guide
@@ -194,6 +227,7 @@ We welcome contributions! Here's how to get started:
 
 ### Feature Ideas
 
+- [ ] Real Bluesky API integration for live post fetching
 - [ ] Add more post types (quote posts, polls)
 - [ ] Custom themes and color schemes
 - [ ] Batch export multiple posts
@@ -201,6 +235,8 @@ We welcome contributions! Here's how to get started:
 - [ ] Template library
 - [ ] Advanced image editing
 - [ ] Export to other formats (SVG, PDF)
+- [ ] User authentication for saved posts
+- [ ] Community post templates
 
 ## License
 
