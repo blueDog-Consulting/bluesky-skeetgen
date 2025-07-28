@@ -1,6 +1,6 @@
-# Bluesky Post Generator
+# Bluesky Image Post Generator
 
-A free, open-source tool for creating realistic Bluesky post mockups for marketing, presentations, and educational purposes. Built with vanilla JavaScript and Tailwind CSS, designed to be fast, responsive, and easy to use.
+A free, open-source tool for creating realistic Bluesky post mockups and generating images from existing posts. Built with vanilla JavaScript and Tailwind CSS, designed to be fast, responsive, and easy to use.
 
 ## Features
 
@@ -9,8 +9,10 @@ A free, open-source tool for creating realistic Bluesky post mockups for marketi
 - **Post Content**: Add text content with character counter (300 char limit)
 - **Images**: Upload custom images for both avatars and post content
 - **Post Types**: Support for regular posts, reposts, and replies
-- **Engagement Metrics**: Set custom repost, like, and reply counts
+- **Engagement Metrics**: Set custom repost, like, and reply counts with randomization
 - **Timestamps**: Customize date and time with smart formatting
+- **Social Handle Input**: Enter Bluesky handles to fetch real posts
+- **Post Selection**: Browse and select from fetched posts with pagination
 
 ### 🎯 **Real-time Preview**
 - Live updates as you type
@@ -30,6 +32,8 @@ A free, open-source tool for creating realistic Bluesky post mockups for marketi
 - **Accessible**: WCAG compliant with keyboard navigation
 - **Cross-browser**: Works on all modern browsers
 - **Lightweight**: Minimal dependencies
+- **Smart Randomization**: Realistic engagement metrics generation
+- **Post Fetching**: Simulated Bluesky API integration for real posts
 
 ## Quick Start
 
