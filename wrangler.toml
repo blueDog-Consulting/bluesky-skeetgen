@@ -1,12 +1,20 @@
-# Cloudflare Pages configuration
-# This file is used for deployment to Cloudflare Pages
+# Cloudflare Workers configuration for Bluesky Post Generator
+name = "bluesky-skeetgen"
+compatibility_date = "2024-01-01"
 
-# For static site deployment, no build command is needed
-# The site will be served directly from the root directory
+# Static assets configuration
+[site]
+bucket = "./site"
 
-# Environment variables can be added here if needed
-# [env.production.vars]
+# Environment variables (if needed in the future)
+# [vars]
 # API_URL = "https://api.example.com"
 
-# For Cloudflare Pages, the configuration is handled through the dashboard
-# This file serves as documentation for the deployment setup
+# Secrets (if needed in the future)
+# [secrets]
+# API_KEY = "your-secret-key"
+
+# Custom domains (configure via wrangler domain add)
+# [env.production.routes]
+# pattern = "yourdomain.com/*"
+# zone_name = "yourdomain.com"

@@ -4,7 +4,46 @@ This guide covers deploying the Bluesky Post Generator to various platforms.
 
 ## Quick Deploy Options
 
-### 1. Cloudflare Pages (Recommended)
+### 1. Cloudflare Workers (Recommended - New Standard)
+
+**Step 1: Install Wrangler CLI**
+```bash
+npm install -g wrangler
+# or
+yarn global add wrangler
+```
+
+**Step 2: Login to Cloudflare**
+```bash
+wrangler login
+```
+
+**Step 3: Initialize Workers Project**
+```bash
+# Create wrangler.toml configuration
+cat > wrangler.toml << EOF
+name = "bluesky-skeetgen"
+compatibility_date = "2024-01-01"
+
+[site]
+bucket = "./site"
+EOF
+```
+
+**Step 4: Deploy to Workers**
+```bash
+wrangler deploy
+```
+
+Your site will be available at `https://bluesky-skeetgen.your-subdomain.workers.dev`
+
+**Step 5: Custom Domain (Optional)**
+```bash
+# Add custom domain
+wrangler domain add yourdomain.com
+```
+
+### 2. Cloudflare Pages (Legacy - Still Supported)
 
 **Step 1: Prepare Repository**
 ```bash
@@ -30,7 +69,7 @@ git push -u origin main
 5. Configure build settings:
    - **Framework preset**: None
    - **Build command**: (leave empty)
-   - **Build output directory**: `.`
+   - **Build output directory**: `site`
    - **Root directory**: (leave empty)
 6. Click "Save and Deploy"
 
@@ -40,14 +79,14 @@ Your site will be available at `https://your-project-name.pages.dev`
 
 **Option A: Drag & Drop**
 1. Go to [Netlify](https://netlify.com/)
-2. Drag your project folder to the deploy area
+2. Drag your `site` folder to the deploy area
 3. Your site will be live instantly
 
 **Option B: Git Integration**
 1. Connect your GitHub repository
 2. Set build settings:
    - Build command: (leave empty)
-   - Publish directory: `.`
+   - Publish directory: `site`
 3. Deploy
 
 ### 3. Vercel
@@ -62,14 +101,43 @@ Your site will be available at `https://your-project-name.pages.dev`
 1. Go to your repository settings
 2. Scroll to "Pages" section
 3. Select "Deploy from a branch"
-4. Choose `main` branch and `/ (root)` folder
+4. Choose `main` branch and `/site` folder
 5. Save
+
+## Why Cloudflare Workers?
+
+According to [Cloudflare's migration guide](https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/), Workers is the recommended replacement for Pages because it offers:
+
+### ✅ **Advantages of Workers over Pages**
+- **Better Performance**: Edge computing with lower latency
+- **More Features**: Full access to Workers runtime APIs
+- **Better Observability**: Workers logs, real-time monitoring
+- **Advanced Routing**: Custom domain support, non-root routes
+- **Future-Proof**: Pages features are being migrated to Workers
+- **Cost Effective**: Same free tier limits, better performance
+
+### 🔄 **Migration Benefits**
+- **Static Assets**: Same static file serving capabilities
+- **Custom Domains**: Full domain management support
+- **Environment Variables**: Same configuration options
+- **Build Integration**: Git-based deployments with automatic builds
 
 ## Environment Variables
 
 No environment variables are required for this static site.
 
 ## Custom Domain
+
+### Cloudflare Workers
+```bash
+# Add custom domain via CLI
+wrangler domain add yourdomain.com
+
+# Or configure in wrangler.toml
+[env.production.routes]
+pattern = "yourdomain.com/*"
+zone_name = "yourdomain.com"
+```
 
 ### Cloudflare Pages
 1. Go to your project settings
@@ -81,6 +149,42 @@ No environment variables are required for this static site.
 - **Netlify**: Domain management in site settings
 - **Vercel**: Domain configuration in project settings
 - **GitHub Pages**: Custom domain in repository settings
+
+## CI/CD with GitHub Actions
+
+### Cloudflare Workers
+Create `.github/workflows/deploy.yml`:
+```yaml
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Wrangler
+        run: npm install -g wrangler
+
+      - name: Deploy to Workers
+        run: wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+```
+
+### Cloudflare Pages
+Automatic deployment from Git - no additional configuration needed.
 
 ## Performance Optimization
 
@@ -170,12 +274,14 @@ localStorage.setItem('debug', 'true');
 ## Cost Analysis
 
 ### Free Tier Limits
+- **Cloudflare Workers**: 100,000 requests/day (3M/month)
 - **Cloudflare Pages**: 100,000 requests/month
 - **Netlify**: 100GB bandwidth/month
 - **Vercel**: 100GB bandwidth/month
 - **GitHub Pages**: Unlimited
 
 ### Paid Options
+- **Cloudflare Workers**: $5/month for 10M requests
 - **Cloudflare Pages Pro**: $20/month for higher limits
 - **Netlify Pro**: $19/month for team features
 - **Vercel Pro**: $20/month for advanced features
