@@ -25,7 +25,11 @@ class PostFetcher {
 
         if (postUrlInput) {
             postUrlInput.addEventListener('input', () => {
-                this.handleDirectUrl();
+                // Debounce the URL input to avoid too many API calls
+                clearTimeout(this.urlDebounceTimer);
+                this.urlDebounceTimer = setTimeout(() => {
+                    this.handleDirectUrl();
+                }, 1000); // Wait 1 second after user stops typing
             });
         }
 
@@ -42,7 +46,7 @@ class PostFetcher {
         }
     }
 
-    async fetchPosts() {
+        async fetchPosts() {
         const handleInput = document.getElementById('social-handle');
         const handle = handleInput?.value?.trim();
 
@@ -57,19 +61,33 @@ class PostFetcher {
         try {
             this.showLoading('Fetching posts...');
 
-            // For now, we'll simulate fetching posts
-            // In a real implementation, you'd call the Bluesky API
-            const posts = await this.simulateFetchPosts(cleanHandle);
+            // Call the real Bluesky API via our worker
+            const response = await fetch(`/api/posts?handle=${encodeURIComponent(cleanHandle)}`);
 
-            this.currentPosts = posts;
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            if (!data.posts || data.posts.length === 0) {
+                this.showError('No posts found for this handle');
+                return;
+            }
+
+            this.currentPosts = data.posts;
             this.currentPage = 0;
             this.displayPosts();
 
-            this.showSuccess(`Found ${posts.length} posts from @${cleanHandle}`);
+            this.showSuccess(`Found ${data.posts.length} posts from @${cleanHandle}`);
 
         } catch (error) {
             console.error('Error fetching posts:', error);
-            this.showError('Failed to fetch posts. Please try again.');
+            this.showError(`Failed to fetch posts: ${error.message}`);
         }
     }
 
@@ -169,15 +187,26 @@ class PostFetcher {
         });
     }
 
-    createPostElement(post) {
+        createPostElement(post) {
         const div = document.createElement('div');
         div.className = 'p-3 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors';
 
         const timestamp = this.formatTimestamp(post.timestamp);
         const truncatedText = post.text.length > 100 ? post.text.substring(0, 100) + '...' : post.text;
 
+        // Add post type indicators
+        let postTypeIndicator = '';
+        if (post.isRepost) {
+            postTypeIndicator = '<span class="text-blue-500 text-xs">🔄 Repost</span>';
+        } else if (post.isReply) {
+            postTypeIndicator = '<span class="text-green-500 text-xs">💬 Reply</span>';
+        }
+
         div.innerHTML = `
-            <div class="text-sm text-gray-900 dark:text-white mb-2">${truncatedText}</div>
+            <div class="flex items-start justify-between mb-2">
+                <div class="text-sm text-gray-900 dark:text-white flex-1">${truncatedText}</div>
+                ${postTypeIndicator}
+            </div>
             <div class="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
                 <span>${timestamp}</span>
                 <div class="flex space-x-3">
@@ -209,15 +238,15 @@ class PostFetcher {
         this.showSuccess('Post selected! You can now export the image.');
     }
 
-    populateExistingPostPreview(post) {
+        populateExistingPostPreview(post) {
         // Create a data object for the existing post
         const postData = {
-            postType: 'post',
+            postType: post.isRepost ? 'repost' : post.isReply ? 'reply' : 'post',
             displayName: post.author,
-            handle: `@${post.author}`,
-            avatar: '',
+            handle: `@${post.handle}`,
+            avatar: post.avatar || '',
             content: post.text,
-            postImage: '',
+            postImage: post.images && post.images.length > 0 ? post.images[0] : '',
             reposts: post.reposts,
             likes: post.likes,
             replies: post.replies,
@@ -246,14 +275,42 @@ class PostFetcher {
         }
     }
 
-    handleDirectUrl() {
+    async handleDirectUrl() {
         const urlInput = document.getElementById('post-url');
         const url = urlInput?.value?.trim();
 
         if (url && url.includes('bsky.app')) {
-            // Extract post data from URL (simplified)
-            this.showSuccess('Direct URL detected! Processing...');
-            // In a real implementation, you'd parse the URL and fetch the specific post
+            try {
+                this.showLoading('Fetching post...');
+
+                // Call the real Bluesky API via our worker
+                const response = await fetch(`/api/post?url=${encodeURIComponent(url)}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                // Populate the preview with the fetched post
+                this.populateExistingPostPreview(data);
+
+                // Show the export section
+                const existingPostExport = document.getElementById('existing-post-export');
+                if (existingPostExport) {
+                    existingPostExport.classList.remove('hidden');
+                }
+
+                this.showSuccess('Post loaded successfully!');
+
+            } catch (error) {
+                console.error('Error fetching post:', error);
+                this.showError(`Failed to fetch post: ${error.message}`);
+            }
         }
     }
 

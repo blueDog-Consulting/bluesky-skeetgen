@@ -28,7 +28,13 @@ npx wrangler deploy
 
 Your site will be available at `https://bluesky-skeetgen.your-subdomain.workers.dev`
 
-**Step 4: Connect GitHub (Optional)**
+**Step 4: Deploy API Worker (Optional - for real Bluesky API)**
+```bash
+# Deploy the API worker for real Bluesky integration
+npx wrangler deploy --name bluesky-skeetgen-api --script api-worker.js
+```
+
+**Step 5: Connect GitHub (Optional)**
 - Go to Cloudflare Dashboard → Workers & Pages
 - Find your deployment and connect GitHub repo for CI/CD
 

@@ -16,9 +16,10 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
 - **Theme Export**: Choose light or dark mode for the exported image
 
 #### **📱 Create from Existing Post**
-- **Social Handle Input**: Enter Bluesky handles to fetch real posts
+- **Social Handle Input**: Enter Bluesky handles to fetch real posts via Bluesky API
 - **Post Selection**: Browse and select from fetched posts with pagination
-- **Direct URL Support**: Paste specific post URLs
+- **Direct URL Support**: Paste specific post URLs for instant loading
+- **Real Data**: Uses actual Bluesky posts with real engagement metrics
 - **Theme Export**: Choose light or dark mode for the exported image
 
 ### 🎯 **Real-time Preview**
@@ -40,7 +41,8 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
 - **Cross-browser**: Works on all modern browsers
 - **Lightweight**: Minimal dependencies
 - **Smart Randomization**: Realistic engagement metrics generation
-- **Post Fetching**: Simulated Bluesky API integration for real posts
+- **Real Bluesky API**: Live post fetching from actual Bluesky accounts
+- **Direct URL Support**: Load specific posts by pasting Bluesky URLs
 
 ## Quick Start
 
@@ -135,18 +137,19 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
 
 1. **Enter Bluesky Handle**
    - Type a Bluesky handle (e.g., @username.bsky.social)
-   - Click "Fetch Posts" to load their posts
-   - Or paste a direct post URL
+   - Click "Fetch Posts" to load their real posts via Bluesky API
+   - Or paste a direct post URL for instant loading
 
 2. **Select a Post**
    - Browse through fetched posts with pagination
+   - Posts show real engagement metrics and content
    - Click on any post to select it
-   - Preview updates automatically
+   - Preview updates automatically with real data
 
 3. **Export**
    - Choose **Light Mode** or **Dark Mode**
    - Click "Export as PNG" to download
-   - Image preserves the original post content and metrics
+   - Image preserves the original post content and real metrics
 
 ### Tips for Best Results
 
@@ -158,7 +161,8 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
 
 #### For Existing Posts:
 - **Handles**: Enter the exact Bluesky handle (e.g., @username.bsky.social)
-- **URLs**: Use direct post URLs for specific posts
+- **URLs**: Use direct post URLs for specific posts (e.g., https://bsky.app/profile/username.bsky.social/post/3juxx2q5n2g2a)
+- **Real Data**: All posts and metrics come from the actual Bluesky API
 - **Selection**: Browse through posts to find the perfect one
 - **Export**: Choose your preferred theme (light/dark) for the final image
 
@@ -179,6 +183,7 @@ bluesky-skeetgen/
 │   │   ├── export-handler.js       # PNG export functionality
 │   │   └── post-fetcher.js         # Bluesky API integration & post selection
 │   └── assets/                     # Images and assets
+├── api-worker.js                   # Cloudflare Worker for Bluesky API proxy
 ├── wrangler.toml                   # Cloudflare Workers config
 ├── DEPLOYMENT.md                   # Deployment guide
 └── README.md                       # Project documentation
@@ -227,7 +232,7 @@ We welcome contributions! Here's how to get started:
 
 ### Feature Ideas
 
-- [ ] Real Bluesky API integration for live post fetching
+- [x] Real Bluesky API integration for live post fetching
 - [ ] Add more post types (quote posts, polls)
 - [ ] Custom themes and color schemes
 - [ ] Batch export multiple posts
