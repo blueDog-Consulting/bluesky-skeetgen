@@ -85,6 +85,14 @@ class BlueskyPostGenerator {
                 this.toggleImageUpload();
             });
         }
+
+        // Randomize metrics button
+        const randomizeMetricsBtn = document.getElementById('randomize-metrics');
+        if (randomizeMetricsBtn) {
+            randomizeMetricsBtn.addEventListener('click', () => {
+                this.randomizeMetrics();
+            });
+        }
     }
 
     initializeDefaultValues() {
@@ -207,6 +215,56 @@ class BlueskyPostGenerator {
             date: document.getElementById('post-date')?.value || '',
             time: document.getElementById('post-time')?.value || ''
         };
+    }
+
+    // Randomize engagement metrics for realistic posts
+    randomizeMetrics() {
+        const repostsInput = document.getElementById('reposts');
+        const likesInput = document.getElementById('likes');
+        const repliesInput = document.getElementById('replies');
+
+        if (repostsInput && likesInput && repliesInput) {
+            // Generate realistic engagement metrics
+            const reposts = Math.floor(Math.random() * 50) + Math.floor(Math.random() * 20);
+            const likes = Math.floor(Math.random() * 200) + Math.floor(Math.random() * 100) + 10;
+            const replies = Math.floor(Math.random() * 15) + Math.floor(Math.random() * 10);
+
+            repostsInput.value = reposts;
+            likesInput.value = likes;
+            repliesInput.value = replies;
+
+            // Update preview
+            this.updatePreview();
+
+            // Show feedback
+            this.showNotification('Metrics randomized! 🎲', 'success');
+        }
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        const bgColor = type === 'success' ? 'bg-green-500' :
+                       type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+
+        notification.className = `fixed top-4 right-4 ${bgColor} text-white px-4 py-2 rounded-md shadow-lg z-50 transition-all duration-300 transform translate-x-full`;
+        notification.textContent = message;
+
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 100);
+
+        // Remove after 3 seconds
+        setTimeout(() => {
+            notification.classList.add('translate-x-full');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
     }
 }
 
