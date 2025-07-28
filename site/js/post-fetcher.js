@@ -254,6 +254,9 @@ class PostFetcher {
             time: new Date(post.timestamp || Date.now()).toTimeString().split(' ')[0]
         };
 
+        // Store the current post data for theme updates
+        this.currentPostData = postData;
+
                 // Update the preview with this data
         if (window.postGenerator) {
             const previewHTML = window.postGenerator.generatePreview(postData);

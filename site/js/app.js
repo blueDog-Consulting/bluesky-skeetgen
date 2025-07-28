@@ -373,8 +373,30 @@ class BlueskyPostGenerator {
             // Add the selected theme class
             previewContainer.classList.add(exportTheme);
 
-            // Force a re-render by updating the preview content
-            this.updatePreview();
+            // Check if we're in the "Create from existing post" workflow
+            const createFromExistingSection = document.getElementById('create-from-existing-section');
+            const isExistingPostWorkflow = createFromExistingSection && !createFromExistingSection.classList.contains('hidden');
+
+            if (isExistingPostWorkflow) {
+                // For existing post workflow, we need to re-render the content with the new theme
+                // but we need to get the current post data from the post fetcher
+                if (window.postFetcher && window.postFetcher.currentPostData) {
+                    console.log('Re-rendering existing post with theme:', exportTheme);
+                    console.log('Current post data:', window.postFetcher.currentPostData);
+                    // Re-render with the stored post data
+                    const previewHTML = window.postGenerator.generatePreview(window.postFetcher.currentPostData);
+                    previewContainer.innerHTML = previewHTML;
+                } else {
+                    console.log('No post fetcher or current post data available');
+                    console.log('window.postFetcher:', window.postFetcher);
+                    if (window.postFetcher) {
+                        console.log('currentPostData:', window.postFetcher.currentPostData);
+                    }
+                }
+            } else {
+                // For custom post workflow, update the preview content
+                this.updatePreview();
+            }
 
             // Ensure the theme is applied after content update
             setTimeout(() => {
