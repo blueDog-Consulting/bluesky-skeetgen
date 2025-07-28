@@ -44,12 +44,12 @@ A free, open-source tool for creating realistic Bluesky post mockups for marketi
 2. **Open in browser**
    ```bash
    # Using Python (if installed)
-   python -m http.server 8000
+   python -m http.server 8000 --directory site
 
    # Using Node.js (if installed)
-   npx serve .
+   npx serve site
 
-   # Or simply open index.html in your browser
+   # Or simply open site/index.html in your browser
    ```
 
 3. **Start customizing!**
@@ -132,15 +132,19 @@ A free, open-source tool for creating realistic Bluesky post mockups for marketi
 
 ```
 bluesky-skeetgen/
-├── index.html          # Main HTML structure
-├── css/
-│   └── styles.css      # Custom Bluesky styling
-├── js/
-│   ├── app.js          # Main app logic & theme management
-│   ├── post-generator.js # Post rendering engine
-│   ├── image-handler.js  # Image upload & processing
-│   └── export-handler.js # PNG export functionality
-└── README.md
+├── site/                           # Static files for deployment
+│   ├── index.html                  # Main application
+│   ├── test.html                   # Test interface
+│   ├── css/styles.css              # Custom Bluesky styling
+│   ├── js/                         # JavaScript modules
+│   │   ├── app.js                  # Main app logic & theme management
+│   │   ├── post-generator.js       # Post rendering engine
+│   │   ├── image-handler.js        # Image upload & processing
+│   │   └── export-handler.js       # PNG export functionality
+│   └── assets/                     # Images and assets
+├── wrangler.toml                   # Cloudflare Workers config
+├── DEPLOYMENT.md                   # Deployment guide
+└── README.md                       # Project documentation
 ```
 
 ### Dependencies

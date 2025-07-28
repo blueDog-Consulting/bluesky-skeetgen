@@ -1,10 +1,10 @@
 # Cloudflare Workers configuration for Bluesky Post Generator
 name = "bluesky-skeetgen"
-compatibility_date = "2024-01-01"
+compatibility_date = "2025-07-28"
 
 # Static assets configuration
-[site]
-bucket = "./site"
+[assets]
+directory = "./site"
 
 # Environment variables (if needed in the future)
 # [vars]

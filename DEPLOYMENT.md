@@ -6,6 +6,8 @@ This guide covers deploying the Bluesky Post Generator to various platforms.
 
 ### 1. Cloudflare Workers (Recommended - New Standard)
 
+#### **Option A: Direct Wrangler Deployment**
+
 **Step 1: Install Wrangler CLI**
 ```bash
 npm install -g wrangler
@@ -18,26 +20,39 @@ yarn global add wrangler
 wrangler login
 ```
 
-**Step 3: Initialize Workers Project**
+**Step 3: Deploy Directly**
 ```bash
-# Create wrangler.toml configuration
-cat > wrangler.toml << EOF
-name = "bluesky-skeetgen"
-compatibility_date = "2024-01-01"
-
-[site]
-bucket = "./site"
-EOF
-```
-
-**Step 4: Deploy to Workers**
-```bash
-wrangler deploy
+# Deploy immediately (creates new Workers deployment)
+npx wrangler deploy
 ```
 
 Your site will be available at `https://bluesky-skeetgen.your-subdomain.workers.dev`
 
-**Step 5: Custom Domain (Optional)**
+**Step 4: Connect GitHub (Optional)**
+- Go to Cloudflare Dashboard → Workers & Pages
+- Find your deployment and connect GitHub repo for CI/CD
+
+#### **Option B: GitHub-First Deployment**
+
+**Step 1: Connect GitHub Repository**
+1. Go to [Cloudflare Workers](https://dash.cloudflare.com/)
+2. Click "Create application" → "Connect to Git"
+3. Select your GitHub repository
+4. Configure build settings:
+   - **Framework preset**: None
+   - **Build command**: (leave empty)
+   - **Build output directory**: `site`
+   - **Root directory**: (leave empty)
+
+**Step 2: Deploy via Git**
+```bash
+# Push changes to trigger deployment
+git add .
+git commit -m "Deploy to Cloudflare Workers"
+git push origin main
+```
+
+**Step 3: Custom Domain (Optional)**
 ```bash
 # Add custom domain
 wrangler domain add yourdomain.com
@@ -107,6 +122,12 @@ Your site will be available at `https://your-project-name.pages.dev`
 ## Why Cloudflare Workers?
 
 According to [Cloudflare's migration guide](https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/), Workers is the recommended replacement for Pages because it offers:
+
+**Note**: This project uses the modern `[assets]` configuration instead of the legacy `[site]` configuration for better performance and compatibility.
+
+**Deployment Options**:
+- **Option A**: Creates a new Workers deployment via CLI (what you experienced)
+- **Option B**: Uses existing GitHub-connected deployment with automatic builds
 
 ### ✅ **Advantages of Workers over Pages**
 - **Better Performance**: Edge computing with lower latency
