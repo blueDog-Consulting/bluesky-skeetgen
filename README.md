@@ -1,16 +1,14 @@
 # Bluesky Post Image Generator
 
-[![Deploy to Cloudflare Workers](https://img.shields.io/badge/Deploy%20to-Cloudflare%20Workers-orange?style=for-the-badge&logo=cloudflare)](https://deploy.workers.cloudflare.com/?url=https://github.com/jerdog/bluesky-skeetgen)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![Made with JavaScript](https://img.shields.io/badge/Made%20with-JavaScript-yellow?style=for-the-badge&logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![Built with Tailwind CSS](https://img.shields.io/badge/Built%20with-Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
-[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/jerdog/bluesky-skeetgen/deploy.yml?branch=main&style=for-the-badge&logo=github-actions)](https://github.com/jerdog/bluesky-skeetgen/actions)
-
 ![alt text](site/assets/icon.png)
 
 A free, open-source tool for creating realistic Bluesky post mockups and generating images from existing posts. Built with vanilla JavaScript and Tailwind CSS, designed to be fast, responsive, and easy to use.
 
 Use it at https://skeetgen.bluedog.dev or [deploy](DEPLOYMENT.md) it to your own server.
+
+[![Version](https://img.shields.io/badge/Version-v1.0.0-blue?style=for-the-badge)](https://github.com/jerdog/bluesky-skeetgen/releases)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/jerdog/bluesky-skeetgen/deploy.yml?branch=main&style=for-the-badge&logo=github-actions)](https://github.com/jerdog/bluesky-skeetgen/actions)
+[![Deploy to Cloudflare Workers](https://img.shields.io/badge/Deploy%20to-Cloudflare%20Workers-orange?style=for-the-badge&logo=cloudflare)](https://deploy.workers.cloudflare.com/?url=https://github.com/jerdog/bluesky-skeetgen)
+[![Made with JavaScript](https://img.shields.io/badge/Made%20with-JavaScript-yellow?style=for-the-badge&logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)[![Built with Tailwind CSS](https://img.shields.io/badge/Built%20with-Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
 
 ## 🚀 Live Demo
 
@@ -18,13 +16,13 @@ Use it at https://skeetgen.bluedog.dev or [deploy](DEPLOYMENT.md) it to your own
 
 ## 📊 GitHub Stats
 
-![GitHub stars](https://img.shields.io/github/stars/jerdog/bluesky-skeetgen?style=social)
-![GitHub forks](https://img.shields.io/github/forks/jerdog/bluesky-skeetgen?style=social)
-![GitHub issues](https://img.shields.io/github/issues/jerdog/bluesky-skeetgen)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/jerdog/bluesky-skeetgen)
-![GitHub contributors](https://img.shields.io/github/contributors/jerdog/bluesky-skeetgen)
-![GitHub last commit](https://img.shields.io/github/last-commit/jerdog/bluesky-skeetgen)
-![GitHub release](https://img.shields.io/github/v/release/jerdog/bluesky-skeetgen)
+![GitHub stars](https://img.shields.io/github/stars/bluedog-consulting/bluesky-skeetgen?style=social)
+![GitHub forks](https://img.shields.io/github/forks/bluedog-consulting/bluesky-skeetgen?style=social)
+![GitHub issues](https://img.shields.io/github/issues/bluedog-consulting/bluesky-skeetgen)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/bluedog-consulting/bluesky-skeetgen)
+![GitHub contributors](https://img.shields.io/github/contributors/bluedog-consulting/bluesky-skeetgen)
+![GitHub last commit](https://img.shields.io/github/last-commit/bluedog-consulting/bluesky-skeetgen)
+![GitHub release](https://img.shields.io/github/v/release/bluedog-consulting/bluesky-skeetgen)
 
 ## 🎯 System Overview
 
