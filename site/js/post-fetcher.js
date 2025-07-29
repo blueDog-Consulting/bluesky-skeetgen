@@ -99,7 +99,7 @@ class PostFetcher {
         const samplePosts = [
             {
                 id: '1',
-                text: `Just testing out this awesome Bluesky Image Post Generator! 🚀 #bluesky #generator`,
+                text: `Just testing out this awesome Bluesky Post Image Generator! 🚀 #bluesky #generator`,
                 author: handle,
                 timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
                 likes: Math.floor(Math.random() * 50) + 10,

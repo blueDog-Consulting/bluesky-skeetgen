@@ -1,4 +1,4 @@
-# Bluesky Image Post Generator
+# Bluesky Post Image Generator
 
 A free, open-source tool for creating realistic Bluesky post mockups and generating images from existing posts. Built with vanilla JavaScript and Tailwind CSS, designed to be fast, responsive, and easy to use.
 

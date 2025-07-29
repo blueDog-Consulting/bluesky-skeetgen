@@ -104,16 +104,31 @@ class ExportHandler {
             console.error('Export failed:', error);
             this.showError('Failed to export image. Please try again.');
         } finally {
-            // Reset button state
-            activeBtn.disabled = false;
-            activeBtn.classList.remove('loading');
-            activeBtn.textContent = 'Export as PNG';
+            // Restore button state
+            if (activeBtn) {
+                activeBtn.disabled = false;
+                activeBtn.classList.remove('loading');
+                activeBtn.textContent = 'Export as PNG';
+            }
         }
     }
 
     generateFilename() {
-        const formData = window.app.getFormData();
-        const displayName = formData.displayName || 'post';
+        // Check if we are in the existing post workflow
+        const createFromExistingSection = document.getElementById('create-from-existing-section');
+        const isExistingPostWorkflow = createFromExistingSection && !createFromExistingSection.classList.contains('hidden');
+        
+        let displayName = 'post';
+        
+        if (isExistingPostWorkflow && window.postFetcher && window.postFetcher.currentPostData) {
+            // Use the current post data for existing posts
+            displayName = window.postFetcher.currentPostData.displayName || 'post';
+        } else {
+            // Use form data for custom posts
+            const formData = window.app.getFormData();
+            displayName = formData.displayName || 'post';
+        }
+
         const date = new Date().toISOString().split('T')[0];
         const time = new Date().toTimeString().slice(0, 8).replace(/:/g, '-');
 
@@ -214,81 +229,44 @@ class ExportHandler {
         }
     }
 
-    // Method to export with different sizes
+    // Export with different sizes
     async exportWithSize(size = 'default') {
-        const sizes = {
-            small: { width: 400, scale: 1 },
-            default: { width: 600, scale: 2 },
-            large: { width: 800, scale: 2 },
-            hd: { width: 1200, scale: 3 }
-        };
-
-        const config = sizes[size] || sizes.default;
         const previewContainer = document.getElementById('post-preview');
-
         if (!previewContainer) return;
 
         try {
-            const exportBtn = document.getElementById('export-btn');
-            if (exportBtn) {
-                exportBtn.disabled = true;
-                exportBtn.classList.add('loading');
-                exportBtn.textContent = 'Generating...';
+            const originalWidth = previewContainer.style.width;
+            const originalHeight = previewContainer.style.height;
+
+            // Set size based on parameter
+            switch (size) {
+                case 'small':
+                    previewContainer.style.width = '300px';
+                    previewContainer.style.height = 'auto';
+                    break;
+                case 'medium':
+                    previewContainer.style.width = '500px';
+                    previewContainer.style.height = 'auto';
+                    break;
+                case 'large':
+                    previewContainer.style.width = '800px';
+                    previewContainer.style.height = 'auto';
+                    break;
+                default:
+                    // Use original size
+                    break;
             }
 
-            // Create a wrapper with the desired size
-            const wrapper = document.createElement('div');
-            wrapper.style.width = `${config.width}px`;
-            wrapper.style.backgroundColor = document.documentElement.classList.contains('dark') ? '#111827' : '#ffffff';
-            wrapper.style.padding = '20px';
-            wrapper.style.borderRadius = '12px';
-            wrapper.style.position = 'absolute';
-            wrapper.style.left = '-9999px';
-            wrapper.style.top = '0';
+            // Export
+            await this.exportAsPNG();
 
-            const clone = previewContainer.cloneNode(true);
-            wrapper.appendChild(clone);
-            document.body.appendChild(wrapper);
-
-            const options = {
-                backgroundColor: document.documentElement.classList.contains('dark') ? '#111827' : '#ffffff',
-                scale: config.scale,
-                useCORS: true,
-                allowTaint: true,
-                width: wrapper.offsetWidth,
-                height: wrapper.offsetHeight
-            };
-
-            const canvas = await html2canvas(wrapper, options);
-            const blob = await new Promise(resolve => {
-                canvas.toBlob(resolve, 'image/png', 0.9);
-            });
-
-            // Download
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = this.generateFilename();
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-
-            // Clean up
-            document.body.removeChild(wrapper);
-
-            this.showSuccess(`Image exported successfully (${size} size)!`);
+            // Restore original size
+            previewContainer.style.width = originalWidth;
+            previewContainer.style.height = originalHeight;
 
         } catch (error) {
-            console.error('Export failed:', error);
-            this.showError('Failed to export image. Please try again.');
-        } finally {
-            const exportBtn = document.getElementById('export-btn');
-            if (exportBtn) {
-                exportBtn.disabled = false;
-                exportBtn.classList.remove('loading');
-                exportBtn.textContent = 'Export as PNG';
-            }
+            console.error('Export with size failed:', error);
+            this.showError('Failed to export image with custom size.');
         }
     }
 }
