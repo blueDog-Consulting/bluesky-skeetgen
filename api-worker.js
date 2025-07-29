@@ -77,6 +77,39 @@ async function handleApiRoutes(request, url, corsHeaders) {
     });
   }
 
+  // Route: Proxy avatar images to avoid CORS issues
+  if (path === '/api/avatar' && request.method === 'GET') {
+    const avatarUrl = url.searchParams.get('url');
+    if (!avatarUrl) {
+      return new Response(JSON.stringify({ error: 'URL parameter is required' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    try {
+      const response = await fetch(avatarUrl);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch avatar: ${response.status}`);
+      }
+
+      const imageBuffer = await response.arrayBuffer();
+      return new Response(imageBuffer, {
+        headers: {
+          ...corsHeaders,
+          'Content-Type': response.headers.get('Content-Type') || 'image/jpeg',
+          'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
+        },
+      });
+    } catch (error) {
+      console.error('Error proxying avatar:', error);
+      return new Response(JSON.stringify({ error: 'Failed to proxy avatar' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+  }
+
   // Route: Health check
   if (path === '/api/health') {
     return new Response(JSON.stringify({ status: 'ok', timestamp: new Date().toISOString() }), {
@@ -180,6 +213,9 @@ async function fetchPostsByHandle(handle) {
       const post = item.post;
       const author = post.author;
 
+      // Use avatar URL as-is from the Bluesky API
+      let avatarUrl = author.avatar || '';
+
       return {
         id: post.uri,
         text: post.record?.text || '',
@@ -189,7 +225,7 @@ async function fetchPostsByHandle(handle) {
         likes: post.likeCount || 0,
         reposts: post.repostCount || 0,
         replies: post.replyCount || 0,
-        avatar: author.avatar || '',
+        avatar: avatarUrl,
         images: post.embed?.images?.map(img => img.fullsize) || [],
         isRepost: item.reason?.$type === 'app.bsky.feed.defs#reasonRepost',
         isReply: post.record?.reply !== undefined,
@@ -244,6 +280,9 @@ async function fetchPostByUrl(postUrl) {
     const post = data.thread.post;
     const author = post.author;
 
+    // Use avatar URL as-is from the Bluesky API
+    let avatarUrl = author.avatar || '';
+
     return {
       id: post.uri,
       text: post.record?.text || '',
@@ -253,7 +292,7 @@ async function fetchPostByUrl(postUrl) {
       likes: post.likeCount || 0,
       reposts: post.repostCount || 0,
       replies: post.replyCount || 0,
-      avatar: author.avatar || '',
+      avatar: avatarUrl,
       images: post.embed?.images?.map(img => img.fullsize) || [],
       isRepost: false, // Individual posts don't show repost status
       isReply: post.record?.reply !== undefined,

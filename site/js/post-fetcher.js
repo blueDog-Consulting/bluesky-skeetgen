@@ -244,7 +244,7 @@ class PostFetcher {
             postType: post.isRepost ? 'repost' : post.isReply ? 'reply' : 'post',
             displayName: post.author || 'Unknown User',
             handle: `@${post.handle || 'unknown.bsky.social'}`,
-            avatar: post.avatar || '',
+            avatar: post.avatar || null, // Use null instead of empty string to trigger fallback
             content: post.text || '',
             postImage: post.images && post.images.length > 0 ? post.images[0] : '',
             reposts: post.reposts || 0,
