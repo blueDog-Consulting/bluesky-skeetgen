@@ -189,22 +189,27 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Build & Deploy Worker
+        uses: cloudflare/wrangler-action@v3
         with:
-          node-version: '18'
-
-      - name: Install Wrangler
-        run: npm install -g wrangler
-
-      - name: Deploy to Workers
-        run: wrangler deploy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 ```
+
+**Required Secrets**:
+- `CLOUDFLARE_API_TOKEN`: Your Cloudflare API token with Workers permissions
+- `CLOUDFLARE_ACCOUNT_ID`: Your Cloudflare account ID
+
+**To set up secrets**:
+1. Go to your GitHub repository → Settings → Secrets and variables → Actions
+2. Add the two secrets above with your Cloudflare credentials
+3. For API token creation, see [Cloudflare's GitHub Actions guide](https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions/)
 
 ### Cloudflare Pages
 Automatic deployment from Git - no additional configuration needed.
