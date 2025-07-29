@@ -6,43 +6,12 @@ class BlueskyPostGenerator {
     }
 
     init() {
-        this.setupTheme();
         this.setupEventListeners();
         this.initializeDefaultValues();
         this.updatePreview();
     }
 
-    setupTheme() {
-        // Check for saved theme preference or default to light mode
-        const savedTheme = localStorage.getItem('bluesky-theme');
-        this.isDarkMode = savedTheme === 'dark' ||
-            (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
-
-        this.applyTheme();
-    }
-
-    applyTheme() {
-        if (this.isDarkMode) {
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('bluesky-theme', 'dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('bluesky-theme', 'light');
-        }
-    }
-
-    toggleTheme() {
-        this.isDarkMode = !this.isDarkMode;
-        this.applyTheme();
-    }
-
     setupEventListeners() {
-        // Theme toggle
-        const themeToggle = document.getElementById('theme-toggle');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => this.toggleTheme());
-        }
-
         // Workflow choice buttons
         const generateNewBtn = document.getElementById('generate-new-btn');
         const createFromExistingBtn = document.getElementById('create-from-existing-btn');
