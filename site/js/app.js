@@ -358,11 +358,22 @@ class BlueskyPostGenerator {
         }
     }
 
-    updatePreviewWithTheme() {
-        // Get the selected export theme
-        const exportTheme = document.querySelector('input[name="export-theme"]:checked')?.value ||
-                           document.querySelector('input[name="export-theme-existing"]:checked')?.value ||
-                           'light';
+        updatePreviewWithTheme() {
+        // Check which workflow we're in
+        const createFromExistingSection = document.getElementById('create-from-existing-section');
+        const isExistingPostWorkflow = createFromExistingSection && !createFromExistingSection.classList.contains('hidden');
+
+        let exportTheme = 'light';
+
+        if (isExistingPostWorkflow) {
+            // For existing post workflow, use the existing-post radio buttons
+            const existingThemeRadio = document.querySelector('input[name="export-theme-existing"]:checked');
+            exportTheme = existingThemeRadio?.value || 'light';
+        } else {
+            // For custom post workflow, use the generate-new radio buttons
+            const generateThemeRadio = document.querySelector('input[name="export-theme"]:checked');
+            exportTheme = generateThemeRadio?.value || 'light';
+        }
 
         // Apply the selected theme to the preview container
         const previewContainer = document.getElementById('post-preview');
@@ -381,17 +392,9 @@ class BlueskyPostGenerator {
                 // For existing post workflow, we need to re-render the content with the new theme
                 // but we need to get the current post data from the post fetcher
                 if (window.postFetcher && window.postFetcher.currentPostData) {
-                    console.log('Re-rendering existing post with theme:', exportTheme);
-                    console.log('Current post data:', window.postFetcher.currentPostData);
                     // Re-render with the stored post data
                     const previewHTML = window.postGenerator.generatePreview(window.postFetcher.currentPostData);
                     previewContainer.innerHTML = previewHTML;
-                } else {
-                    console.log('No post fetcher or current post data available');
-                    console.log('window.postFetcher:', window.postFetcher);
-                    if (window.postFetcher) {
-                        console.log('currentPostData:', window.postFetcher.currentPostData);
-                    }
                 }
             } else {
                 // For custom post workflow, update the preview content
