@@ -1,6 +1,10 @@
 # Bluesky Post Image Generator
 
+![alt text](site/assets/icon.png)
+
 A free, open-source tool for creating realistic Bluesky post mockups and generating images from existing posts. Built with vanilla JavaScript and Tailwind CSS, designed to be fast, responsive, and easy to use.
+
+Use it at https://skeetgen.bluedog.dev or [deploy](DEPLOYMENT.md) it to your own server.
 
 ## Features
 
@@ -25,14 +29,13 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
 ### 🎯 **Real-time Preview**
 - Live updates as you type
 - Responsive design for mobile and desktop
-- Dark/light mode toggle
+- Dark/light mode toggle of the preview image
 - Bluesky-accurate styling
 
 ### 📱 **Export Options**
 - High-quality PNG export
-- Automatic filename generation
-- Multiple size options (small, default, large, HD)
-- Custom styling options
+- Automatic filename generation with user's handle/display name
+- Light and dark mode export themes
 
 ### 🚀 **Technical Features**
 - **Fast**: Client-side generation with no server required
@@ -133,7 +136,7 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
    - Choose **Light Mode** or **Dark Mode**
    - Click "Export as PNG" to download
    - Image includes all styling and content
-   - Automatic filename generation
+   - Automatic filename generation with your handle/display name
 
 ### 📱 Create from Existing Post
 
@@ -193,10 +196,10 @@ bluesky-skeetgen/
 
 ### Dependencies
 
-- **Tailwind CSS** (CDN): Styling framework
-- **html2canvas** (CDN): PNG export functionality
+- **[Tailwind CSS](https://github.com/tailwindlabs/tailwindcss)** (CDN): Styling framework
+- **[html2canvas](https://github.com/niklasvh/html2canvas)** (CDN): PNG export functionality
 - **Vanilla JavaScript**: No build process required
-- **Cloudflare Workers**: For API integration and static asset serving
+- **[Cloudflare Workers](https://workers.cloudflare.com/)**: For API integration and static asset serving
 
 ### Browser Support
 
@@ -239,14 +242,9 @@ We welcome contributions! Here's how to get started:
 
 - [x] Real Bluesky API integration for live post fetching (using [api.bsky.app](https://api.bsky.app))
 - [ ] Add more post types (quote posts, polls)
-- [ ] Custom themes and color schemes
 - [ ] Batch export multiple posts
 - [ ] Social media sharing
-- [ ] Template library
-- [ ] Advanced image editing
-- [ ] Export to other formats (SVG, PDF)
 - [ ] User authentication for saved posts
-- [ ] Community post templates
 
 ## License
 
@@ -255,14 +253,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgments
 
 - Inspired by [BrandBird's Bluesky Post Generator](https://www.brandbird.app/tools/bluesky-post-generator)
-- Built with [Tailwind CSS](https://tailwindcss.com/)
-- Image processing with [html2canvas](https://html2canvas.hertzen.com/)
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/bluesky-skeetgen/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/bluesky-skeetgen/discussions)
-- **Email**: your-email@example.com
+- **Issues**: [GitHub Issues](https://github.com/bluedog-consulting/bluesky-skeetgen/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/bluedog-consulting/bluesky-skeetgen/discussions)
 
 ---
 
