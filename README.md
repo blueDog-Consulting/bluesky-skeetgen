@@ -1,10 +1,43 @@
 # Bluesky Post Image Generator
 
+[![Deploy to Cloudflare Workers](https://img.shields.io/badge/Deploy%20to-Cloudflare%20Workers-orange?style=for-the-badge&logo=cloudflare)](https://deploy.workers.cloudflare.com/?url=https://github.com/jerdog/bluesky-skeetgen)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![Made with JavaScript](https://img.shields.io/badge/Made%20with-JavaScript-yellow?style=for-the-badge&logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Built with Tailwind CSS](https://img.shields.io/badge/Built%20with-Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/jerdog/bluesky-skeetgen/deploy.yml?branch=main&style=for-the-badge&logo=github-actions)](https://github.com/jerdog/bluesky-skeetgen/actions)
+
 ![alt text](site/assets/icon.png)
 
 A free, open-source tool for creating realistic Bluesky post mockups and generating images from existing posts. Built with vanilla JavaScript and Tailwind CSS, designed to be fast, responsive, and easy to use.
 
 Use it at https://skeetgen.bluedog.dev or [deploy](DEPLOYMENT.md) it to your own server.
+
+## 🚀 Live Demo
+
+**[Try it now → https://skeetgen.bluedog.dev](https://skeetgen.bluedog.dev)**
+
+## 📊 GitHub Stats
+
+![GitHub stars](https://img.shields.io/github/stars/jerdog/bluesky-skeetgen?style=social)
+![GitHub forks](https://img.shields.io/github/forks/jerdog/bluesky-skeetgen?style=social)
+![GitHub issues](https://img.shields.io/github/issues/jerdog/bluesky-skeetgen)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/jerdog/bluesky-skeetgen)
+![GitHub contributors](https://img.shields.io/github/contributors/jerdog/bluesky-skeetgen)
+![GitHub last commit](https://img.shields.io/github/last-commit/jerdog/bluesky-skeetgen)
+![GitHub release](https://img.shields.io/github/v/release/jerdog/bluesky-skeetgen)
+
+## 🎯 System Overview
+
+| Feature | Status | Description |
+|---------|--------|-------------|
+| 🎨 Generate New Posts | ✅ Complete | Create custom Bluesky posts from scratch |
+| 📱 Real Post Integration | ✅ Complete | Fetch and use actual Bluesky posts |
+| 🌙 Dark/Light Mode | ✅ Complete | Export in both themes |
+| 📱 Mobile Responsive | ✅ Complete | Works on all devices |
+| 🚀 Cloudflare Deployment | ✅ Complete | One-click deployment |
+| 🔒 CORS-Free Avatars | ✅ Complete | Proxy for Bluesky CDN images |
+| 📊 Real Engagement Data | ✅ Complete | Uses actual Bluesky metrics |
+| 🎯 WCAG Compliant | ✅ Complete | Accessibility standards |
 
 ## Features
 
