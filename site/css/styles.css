@@ -11,6 +11,7 @@
     align-items: flex-start;
     gap: 12px;
     margin-bottom: 12px;
+    position: relative;
 }
 
 .post-avatar {
@@ -328,4 +329,18 @@ button:focus {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Bluesky logo styling */
+.bluesky-logo {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: #0085FF;
+    opacity: 0.8;
+}
+
+.bluesky-logo svg {
+    width: 20px;
+    height: 20px;
 }

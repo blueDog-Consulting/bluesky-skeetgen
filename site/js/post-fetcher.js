@@ -335,22 +335,20 @@ class PostFetcher {
 
     formatTimestamp(timestamp) {
         const date = new Date(timestamp);
-        const now = new Date();
-        const diffInMinutes = Math.floor((now - date) / (1000 * 60));
 
-        if (diffInMinutes < 1) return 'now';
-        if (diffInMinutes < 60) return `${diffInMinutes}m`;
-
-        const diffInHours = Math.floor(diffInMinutes / 60);
-        if (diffInHours < 24) return `${diffInHours}h`;
-
-        const diffInDays = Math.floor(diffInHours / 24);
-        if (diffInDays < 7) return `${diffInDays}d`;
-
-        return date.toLocaleDateString('en-US', {
+        // Show date and time in "MMM YYYY 12hr Time" format
+        const dateStr = date.toLocaleDateString('en-US', {
             month: 'short',
-            day: 'numeric'
+            year: 'numeric'
         });
+
+        const timeStr = date.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+        });
+
+        return `${dateStr} ${timeStr}`;
     }
 
     showLoading(message) {

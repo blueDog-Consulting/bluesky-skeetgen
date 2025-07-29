@@ -51,6 +51,13 @@ class PostGenerator {
                         <div class="post-handle">${this.escapeHtml(handle)}</div>
                         <div class="post-timestamp">${this.formatTimestamp(date, time)}</div>
                     </div>
+                    <div class="bluesky-logo">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                            <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+                            <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                        </svg>
+                    </div>
                 </div>
 
                 ${content ? `<div class="post-content">${this.formatContent(content)}</div>` : ''}
@@ -79,6 +86,13 @@ class PostGenerator {
                         <div class="post-display-name">${this.escapeHtml(displayName)}</div>
                         <div class="post-handle">${this.escapeHtml(handle)}</div>
                         <div class="post-timestamp">${this.formatTimestamp(date, time)}</div>
+                    </div>
+                    <div class="bluesky-logo">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                            <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+                            <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                        </svg>
                     </div>
                 </div>
 
@@ -136,6 +150,13 @@ class PostGenerator {
                             <div class="post-display-name">${this.escapeHtml(displayName)}</div>
                             <div class="post-handle">${this.escapeHtml(handle)}</div>
                             <div class="post-timestamp">${this.formatTimestamp(date, time)}</div>
+                        </div>
+                        <div class="bluesky-logo">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                                <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+                                <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                            </svg>
                         </div>
                     </div>
 
@@ -215,22 +236,20 @@ class PostGenerator {
 
         try {
             const dateTime = new Date(`${date}T${time}`);
-            const now = new Date();
-            const diffInMinutes = Math.floor((now - dateTime) / (1000 * 60));
 
-            if (diffInMinutes < 1) return 'now';
-            if (diffInMinutes < 60) return `${diffInMinutes}m`;
-
-            const diffInHours = Math.floor(diffInMinutes / 60);
-            if (diffInHours < 24) return `${diffInHours}h`;
-
-            const diffInDays = Math.floor(diffInHours / 24);
-            if (diffInDays < 7) return `${diffInDays}d`;
-
-            return dateTime.toLocaleDateString('en-US', {
+            // Show date and time in "MMM YYYY 12hr Time" format
+            const dateStr = dateTime.toLocaleDateString('en-US', {
                 month: 'short',
-                day: 'numeric'
+                year: 'numeric'
             });
+
+            const timeStr = dateTime.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+
+            return `${dateStr} ${timeStr}`;
         } catch (e) {
             return `${date} ${time}`;
         }
