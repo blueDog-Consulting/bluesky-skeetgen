@@ -335,20 +335,15 @@ class PostFetcher {
 
     formatTimestamp(timestamp) {
         const date = new Date(timestamp);
-
-        // Show date and time in "MMM YYYY 12hr Time" format
-        const dateStr = date.toLocaleDateString('en-US', {
-            month: 'short',
-            year: 'numeric'
-        });
-
+        const day = date.getDate();
+        const month = date.toLocaleDateString('en-US', { month: 'long' });
+        const year = date.getFullYear();
         const timeStr = date.toLocaleTimeString('en-US', {
             hour: 'numeric',
             minute: '2-digit',
             hour12: true
         });
-
-        return `${dateStr} ${timeStr}`;
+        return `${day} ${month} ${year} at ${timeStr}`;
     }
 
     showLoading(message) {

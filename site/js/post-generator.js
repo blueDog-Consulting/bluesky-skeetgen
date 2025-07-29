@@ -52,11 +52,7 @@ class PostGenerator {
                         <div class="post-timestamp">${this.formatTimestamp(date, time)}</div>
                     </div>
                     <div class="bluesky-logo">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                            <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
-                            <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
-                        </svg>
+                        <img src="/assets/32px-Bluesky_Logo.png" alt="Bluesky" width="20" height="20">
                     </div>
                 </div>
 
@@ -88,10 +84,10 @@ class PostGenerator {
                         <div class="post-timestamp">${this.formatTimestamp(date, time)}</div>
                     </div>
                     <div class="bluesky-logo">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                            <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
-                            <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
+                        <svg width="20" height="20" viewBox="0 0 120 120" fill="none">
+                            <g>
+                                <path fill="#0085FF" d="M60 90c-7.5-13.5-30-18-30-36 0-10.5 9-19.5 19.5-19.5 6 0 10.5 3 13.5 7.5C65.5 37.5 70 34.5 76 34.5c10.5 0 19.5 9 19.5 19.5 0 18-22.5 22.5-30 36z"/>
+                            </g>
                         </svg>
                     </div>
                 </div>
@@ -152,11 +148,7 @@ class PostGenerator {
                             <div class="post-timestamp">${this.formatTimestamp(date, time)}</div>
                         </div>
                         <div class="bluesky-logo">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                                <path d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
-                                <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/>
-                            </svg>
+                            <img src="/assets/32px-Bluesky_Logo.png" alt="Bluesky" width="20" height="20">
                         </div>
                     </div>
 
@@ -233,23 +225,17 @@ class PostGenerator {
 
     formatTimestamp(date, time) {
         if (!date || !time) return '';
-
         try {
             const dateTime = new Date(`${date}T${time}`);
-
-            // Show date and time in "MMM YYYY 12hr Time" format
-            const dateStr = dateTime.toLocaleDateString('en-US', {
-                month: 'short',
-                year: 'numeric'
-            });
-
+            const day = dateTime.getDate();
+            const month = dateTime.toLocaleDateString('en-US', { month: 'long' });
+            const year = dateTime.getFullYear();
             const timeStr = dateTime.toLocaleTimeString('en-US', {
                 hour: 'numeric',
                 minute: '2-digit',
                 hour12: true
             });
-
-            return `${dateStr} ${timeStr}`;
+            return `${day} ${month} ${year} at ${timeStr}`;
         } catch (e) {
             return `${date} ${time}`;
         }
