@@ -9,15 +9,6 @@ main = "api-worker.js"
 [assets]
 directory = "./site"
 
-# Environment variables (if needed in the future)
-# [vars]
-# API_URL = "https://api.example.com"
-
-# Secrets (if needed in the future)
-# [secrets]
-# API_KEY = "your-secret-key"
-
-# Custom domains (configure via wrangler domain add)
-# [env.production.routes]
-# pattern = "yourdomain.com/*"
-# zone_name = "yourdomain.com"
+[observability]
+enabled = true
+head_sampling_rate = 1 # optional. default = 1.
