@@ -171,23 +171,19 @@ class PostGenerator {
     createAvatarHTML(avatarSrc) {
         // Check if avatarSrc is truthy and not empty
         if (avatarSrc && avatarSrc !== '') {
-            console.log('Creating avatar with URL:', avatarSrc);
-
             // Convert Bluesky CDN URLs to our proxy to avoid CORS issues
             let proxyUrl = avatarSrc;
             if (avatarSrc.includes('cdn.bsky.app')) {
                 proxyUrl = `/api/avatar?url=${encodeURIComponent(avatarSrc)}`;
-                console.log('Using proxy URL:', proxyUrl);
             }
 
             return `
                 <div class="post-avatar">
-                    <img src="${proxyUrl}" alt="Avatar" onload="console.log('Avatar loaded successfully:', this.src)" onerror="console.log('Avatar failed to load:', this.src); this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <img src="${proxyUrl}" alt="Avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <span style="display: none;">👤</span>
                 </div>
             `;
         } else {
-            console.log('Using fallback avatar (no URL provided)');
             return `
                 <div class="post-avatar">
                     <span>👤</span>
