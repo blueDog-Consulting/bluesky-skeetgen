@@ -345,6 +345,10 @@ button:focus {
 }
 
 /* Watermark styling */
+.post-container {
+    position: relative;
+}
+
 .watermark {
     position: absolute;
     bottom: 8px;
@@ -355,16 +359,22 @@ button:focus {
     font-weight: 500;
     pointer-events: none;
     z-index: 10;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 6px;
+    border-radius: 4px;
 }
 
 .dark .watermark {
     color: #8899a6;
+    background: rgba(0, 0, 0, 0.8);
 }
 
 #post-preview.light .watermark {
     color: #657786;
+    background: rgba(255, 255, 255, 0.9);
 }
 
 #post-preview.dark .watermark {
     color: #8899a6;
+    background: rgba(0, 0, 0, 0.8);
 }

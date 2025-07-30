@@ -296,23 +296,158 @@ class BlueskyPostGenerator {
 
     // Workflow navigation methods
     showGenerateNewSection() {
-        const initialChoice = document.getElementById('initial-choice');
-        const generateNewSection = document.getElementById('generate-new-section');
+        // Check if we're currently in the existing post workflow
+        const createFromExistingSection = document.getElementById('create-from-existing-section');
+        const isInExistingWorkflow = createFromExistingSection && !createFromExistingSection.classList.contains('hidden');
 
-        if (initialChoice && generateNewSection) {
-            initialChoice.classList.add('hidden');
-            generateNewSection.classList.remove('hidden');
+        if (isInExistingWorkflow) {
+            // Show confirmation dialog
+            if (confirm('Switching to "Generate New Post Image" will reset your current selections. Do you want to continue?')) {
+                this.resetToGenerateNew();
+            }
+        } else {
+            this.resetToGenerateNew();
         }
     }
 
     showCreateFromExistingSection() {
+        // Check if we're currently in the generate new workflow
+        const generateNewSection = document.getElementById('generate-new-section');
+        const isInGenerateNewWorkflow = generateNewSection && !generateNewSection.classList.contains('hidden');
+
+        if (isInGenerateNewWorkflow) {
+            // Show confirmation dialog
+            if (confirm('Switching to "Create from Existing Post" will reset your current selections. Do you want to continue?')) {
+                this.resetToCreateFromExisting();
+            }
+        } else {
+            this.resetToCreateFromExisting();
+        }
+    }
+
+    resetToGenerateNew() {
         const initialChoice = document.getElementById('initial-choice');
+        const generateNewSection = document.getElementById('generate-new-section');
         const createFromExistingSection = document.getElementById('create-from-existing-section');
 
-        if (initialChoice && createFromExistingSection) {
+        if (initialChoice && generateNewSection && createFromExistingSection) {
+            // Hide all sections
             initialChoice.classList.add('hidden');
-            createFromExistingSection.classList.remove('hidden');
+            createFromExistingSection.classList.add('hidden');
+
+            // Show generate new section
+            generateNewSection.classList.remove('hidden');
+
+            // Reset form fields
+            this.resetGenerateNewForm();
+
+            // Update preview with fresh data
+            this.updatePreview();
         }
+    }
+
+    resetToCreateFromExisting() {
+        const initialChoice = document.getElementById('initial-choice');
+        const generateNewSection = document.getElementById('generate-new-section');
+        const createFromExistingSection = document.getElementById('create-from-existing-section');
+
+        if (initialChoice && generateNewSection && createFromExistingSection) {
+            // Hide all sections
+            initialChoice.classList.add('hidden');
+            generateNewSection.classList.add('hidden');
+
+            // Show create from existing section
+            createFromExistingSection.classList.remove('hidden');
+
+            // Reset form fields
+            this.resetCreateFromExistingForm();
+
+            // Clear any existing post data
+            if (window.postFetcher) {
+                window.postFetcher.currentPostData = null;
+            }
+
+            // Clear preview
+            const previewContainer = document.getElementById('post-preview');
+            if (previewContainer) {
+                previewContainer.innerHTML = '';
+            }
+        }
+    }
+
+    resetGenerateNewForm() {
+        // Reset all form fields to default values
+        const fields = {
+            'display-name': 'John Doe',
+            'handle': '@johndoe.bsky.social',
+            'post-content': '',
+            'reposts': '12',
+            'likes': '42',
+            'replies': '8',
+            'post-date': this.getCurrentDate(),
+            'post-time': this.getCurrentTime()
+        };
+
+        Object.keys(fields).forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.value = fields[id];
+            }
+        });
+
+        // Reset post type to regular post
+        const regularPostRadio = document.querySelector('input[name="post-type"][value="post"]');
+        if (regularPostRadio) {
+            regularPostRadio.checked = true;
+        }
+
+        // Reset theme to light
+        const lightThemeRadio = document.querySelector('input[name="export-theme"][value="light"]');
+        if (lightThemeRadio) {
+            lightThemeRadio.checked = true;
+        }
+
+        // Clear any uploaded images
+        const imagePreview = document.getElementById('image-preview');
+        if (imagePreview) {
+            imagePreview.innerHTML = '';
+        }
+    }
+
+    resetCreateFromExistingForm() {
+        // Reset handle input
+        const handleInput = document.getElementById('existing-handle');
+        if (handleInput) {
+            handleInput.value = '';
+        }
+
+        // Reset post URL input
+        const postUrlInput = document.getElementById('post-url');
+        if (postUrlInput) {
+            postUrlInput.value = '';
+        }
+
+        // Reset theme to light
+        const lightThemeRadio = document.querySelector('input[name="export-theme-existing"][value="light"]');
+        if (lightThemeRadio) {
+            lightThemeRadio.checked = true;
+        }
+
+        // Clear post list
+        const postList = document.getElementById('post-list');
+        if (postList) {
+            postList.innerHTML = '';
+        }
+    }
+
+    getCurrentDate() {
+        const now = new Date();
+        return now.toISOString().split('T')[0];
+    }
+
+    getCurrentTime() {
+        const now = new Date();
+        return now.toTimeString().split(' ')[0].substring(0, 5);
     }
 
         showInitialChoice() {
