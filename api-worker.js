@@ -1,6 +1,7 @@
 // Cloudflare Worker for Bluesky Post Generator - handles both static assets and API routes
 export default {
   async fetch(request, env, ctx) {
+    console.log('Worker called for path:', request.url);
     const url = new URL(request.url);
     const path = url.pathname;
 
@@ -23,12 +24,15 @@ export default {
     };
 
     try {
+      console.log('Processing request for path:', path);
       // API Routes
       if (path.startsWith('/api/')) {
+        console.log('Handling API route');
         return await handleApiRoutes(request, url, corsHeaders);
       }
 
       // Static Assets - serve from site directory
+      console.log('Handling static asset');
       return await serveStaticAssets(request, url, corsHeaders);
 
     } catch (error) {
@@ -73,6 +77,16 @@ async function handleApiRoutes(request, url, corsHeaders) {
 
     const post = await fetchPostByUrl(postUrl);
     return new Response(JSON.stringify(post), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // Route: Get Google Analytics configuration
+  if (path === '/api/ga-config' && request.method === 'GET') {
+    return new Response(JSON.stringify({
+      enabled: !!env.GOOGLE_ANALYTICS_ID,
+      id: env.GOOGLE_ANALYTICS_ID || null
+    }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
@@ -147,24 +161,7 @@ async function serveStaticAssets(request, url, corsHeaders) {
       // If asset not found, serve index.html for SPA routing
       const indexAsset = await env.ASSETS.fetch(new Request('https://fake-host/index.html'));
 
-      // Process index.html for Google Analytics
-      console.log('Processing index.html (404 handler)');
-      const htmlContent = await indexAsset.text();
-      let modifiedHtml = htmlContent;
-
-      // If GA ID is set, replace placeholder; otherwise, replace with empty string
-      if (env.GOOGLE_ANALYTICS_ID) {
-        console.log('GA ID found (404 handler):', env.GOOGLE_ANALYTICS_ID);
-        modifiedHtml = htmlContent.replace(/\{\{GOOGLE_ANALYTICS_ID\}\}/g, env.GOOGLE_ANALYTICS_ID);
-      } else {
-        console.log('No GA ID configured (404 handler)');
-        // Replace placeholder with empty string to disable GA
-        modifiedHtml = htmlContent.replace(/\{\{GOOGLE_ANALYTICS_ID\}\}/g, '');
-      }
-
-      console.log('404 handler HTML processing complete');
-
-      return new Response(modifiedHtml, {
+            return new Response(indexAsset.body, {
         status: 200,
         headers: {
           ...corsHeaders,
@@ -183,31 +180,7 @@ async function serveStaticAssets(request, url, corsHeaders) {
     else if (filePath.endsWith('.gif')) contentType = 'image/gif';
     else if (filePath.endsWith('.svg')) contentType = 'image/svg+xml';
 
-        // Replace Google Analytics placeholder with actual ID for HTML files
-    if (filePath.endsWith('.html')) {
-      console.log('Processing HTML file:', filePath);
-      const htmlContent = await asset.text();
-      let modifiedHtml = htmlContent;
 
-      // If GA ID is set, replace placeholder; otherwise, replace with empty string
-      if (env.GOOGLE_ANALYTICS_ID) {
-        console.log('GA ID found:', env.GOOGLE_ANALYTICS_ID);
-        modifiedHtml = htmlContent.replace(/\{\{GOOGLE_ANALYTICS_ID\}\}/g, env.GOOGLE_ANALYTICS_ID);
-      } else {
-        console.log('No GA ID configured');
-        // Replace placeholder with empty string to disable GA
-        modifiedHtml = htmlContent.replace(/\{\{GOOGLE_ANALYTICS_ID\}\}/g, '');
-      }
-
-      console.log('HTML processing complete');
-      return new Response(modifiedHtml, {
-        status: 200,
-        headers: {
-          ...corsHeaders,
-          'Content-Type': contentType,
-        },
-      });
-    }
 
     return new Response(asset.body, {
       status: 200,
