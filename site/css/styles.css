@@ -343,3 +343,28 @@ button:focus {
     width: 20px;
     height: 20px;
 }
+
+/* Watermark styling */
+.watermark {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-size: 10px;
+    color: #657786;
+    opacity: 0.7;
+    font-weight: 500;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.dark .watermark {
+    color: #8899a6;
+}
+
+#post-preview.light .watermark {
+    color: #657786;
+}
+
+#post-preview.dark .watermark {
+    color: #8899a6;
+}
