@@ -6,7 +6,7 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
 
 Use it at https://skeetgen.bluedog.dev
 
-[![Version](https://img.shields.io/badge/Version-v1.2.0-blue?style=for-the-badge)](https://github.com/bluedog-consulting/bluesky-skeetgen/releases)
+[![Version](https://img.shields.io/badge/Version-v1.2.1-blue?style=for-the-badge)](https://github.com/bluedog-consulting/bluesky-skeetgen/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![GitHub Actions](https://img.shields.io/github/actions/workflow/status/bluedog-consulting/bluesky-skeetgen/deploy.yml?branch=main&style=for-the-badge&logo=github-actions)](https://github.com/bluedog-consulting/bluesky-skeetgen/actions)
 [![Deploy to Cloudflare Workers](https://img.shields.io/badge/Deploy%20to-Cloudflare%20Workers-orange?style=for-the-badge&logo=cloudflare)](https://deploy.workers.cloudflare.com/?url=https://github.com/bluedog-consulting/bluesky-skeetgen)
