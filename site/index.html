@@ -55,7 +55,7 @@
     <script>
       // Check if Google Analytics ID is available (set via Cloudflare Workers environment variable)
       const gaId = '{{GOOGLE_ANALYTICS_ID}}';
-      if (gaId && gaId !== '{{GOOGLE_ANALYTICS_ID}}') {
+      if (gaId && gaId !== '{{GOOGLE_ANALYTICS_ID}}' && gaId.trim() !== '') {
         // Google Analytics 4 (GA4) tracking code
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}

@@ -146,7 +146,25 @@ async function serveStaticAssets(request, url, corsHeaders) {
     if (asset.status === 404) {
       // If asset not found, serve index.html for SPA routing
       const indexAsset = await env.ASSETS.fetch(new Request('https://fake-host/index.html'));
-      return new Response(indexAsset.body, {
+
+      // Process index.html for Google Analytics
+      console.log('Processing index.html (404 handler)');
+      const htmlContent = await indexAsset.text();
+      let modifiedHtml = htmlContent;
+
+      // If GA ID is set, replace placeholder; otherwise, replace with empty string
+      if (env.GOOGLE_ANALYTICS_ID) {
+        console.log('GA ID found (404 handler):', env.GOOGLE_ANALYTICS_ID);
+        modifiedHtml = htmlContent.replace(/\{\{GOOGLE_ANALYTICS_ID\}\}/g, env.GOOGLE_ANALYTICS_ID);
+      } else {
+        console.log('No GA ID configured (404 handler)');
+        // Replace placeholder with empty string to disable GA
+        modifiedHtml = htmlContent.replace(/\{\{GOOGLE_ANALYTICS_ID\}\}/g, '');
+      }
+
+      console.log('404 handler HTML processing complete');
+
+      return new Response(modifiedHtml, {
         status: 200,
         headers: {
           ...corsHeaders,
@@ -166,10 +184,22 @@ async function serveStaticAssets(request, url, corsHeaders) {
     else if (filePath.endsWith('.svg')) contentType = 'image/svg+xml';
 
         // Replace Google Analytics placeholder with actual ID for HTML files
-    if (filePath.endsWith('.html') && env.GOOGLE_ANALYTICS_ID) {
+    if (filePath.endsWith('.html')) {
+      console.log('Processing HTML file:', filePath);
       const htmlContent = await asset.text();
-      const modifiedHtml = htmlContent.replace(/\{\{GOOGLE_ANALYTICS_ID\}\}/g, env.GOOGLE_ANALYTICS_ID);
+      let modifiedHtml = htmlContent;
 
+      // If GA ID is set, replace placeholder; otherwise, replace with empty string
+      if (env.GOOGLE_ANALYTICS_ID) {
+        console.log('GA ID found:', env.GOOGLE_ANALYTICS_ID);
+        modifiedHtml = htmlContent.replace(/\{\{GOOGLE_ANALYTICS_ID\}\}/g, env.GOOGLE_ANALYTICS_ID);
+      } else {
+        console.log('No GA ID configured');
+        // Replace placeholder with empty string to disable GA
+        modifiedHtml = htmlContent.replace(/\{\{GOOGLE_ANALYTICS_ID\}\}/g, '');
+      }
+
+      console.log('HTML processing complete');
       return new Response(modifiedHtml, {
         status: 200,
         headers: {
