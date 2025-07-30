@@ -5,6 +5,25 @@ All notable changes to the Bluesky Post Image Generator project will be document
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-01-XX
+
+### Enhanced
+- **🔄 Workflow Management**: Improved seamless switching between workflows with better state management
+- **💾 Content Preservation**: Enhanced preservation of uploaded images and form data across workflow switches
+- **🎯 Smart Defaults**: Improved default content preservation across all workflows
+- **🧹 Code Cleanup**: Removed all unnecessary debug logs and cleaned up codebase for production
+
+### Technical Improvements
+- **State Management**: Enhanced workflow state tracking and preservation
+- **Error Handling**: Improved error handling for workflow switches
+- **Performance**: Cleaner codebase with reduced debug overhead
+- **User Experience**: Smoother workflow transitions with better confirmation dialogs
+
+### Bug Fixes
+- **Workflow Switching**: Fixed confirmation dialog logic for seamless workflow transitions
+- **Content Preservation**: Fixed default content preservation when switching workflows
+- **Debug Cleanup**: Removed all unnecessary console.log statements for production readiness
+
 ## [1.0.0] - 2025-01-XX
 
 ### Added
@@ -71,6 +90,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
+- **v1.1.0**: Enhanced workflow management with seamless switching, content preservation, and cleaned codebase
 - **v1.0.0**: Complete feature set with workflow switching, real API integration, and professional UX
 - **v0.9.0**: Initial prototype with basic post generation capabilities
 
