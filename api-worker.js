@@ -165,6 +165,20 @@ async function serveStaticAssets(request, url, corsHeaders) {
     else if (filePath.endsWith('.gif')) contentType = 'image/gif';
     else if (filePath.endsWith('.svg')) contentType = 'image/svg+xml';
 
+        // Replace Google Analytics placeholder with actual ID for HTML files
+    if (filePath.endsWith('.html') && env.GOOGLE_ANALYTICS_ID) {
+      const htmlContent = await asset.text();
+      const modifiedHtml = htmlContent.replace(/\{\{GOOGLE_ANALYTICS_ID\}\}/g, env.GOOGLE_ANALYTICS_ID);
+
+      return new Response(modifiedHtml, {
+        status: 200,
+        headers: {
+          ...corsHeaders,
+          'Content-Type': contentType,
+        },
+      });
+    }
+
     return new Response(asset.body, {
       status: 200,
       headers: {
@@ -303,3 +317,4 @@ async function fetchPostByUrl(postUrl) {
     return { error: error.message };
   }
 }
+

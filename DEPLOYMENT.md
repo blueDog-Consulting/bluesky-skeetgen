@@ -34,6 +34,25 @@ Your site will be available at `https://bluesky-skeetgen.your-subdomain.workers.
 - Go to Cloudflare Dashboard → Workers & Pages
 - Find your deployment and connect GitHub repo for CI/CD
 
+**Step 5: Configure Google Analytics (Optional)**
+```bash
+# Set Google Analytics ID as environment variable
+wrangler secret put GOOGLE_ANALYTICS_ID
+# Enter your GA4 tracking ID when prompted (e.g., G-XXXXXXXXXX)
+```
+
+**Or via Cloudflare Dashboard:**
+1. Go to Cloudflare Dashboard → Workers & Pages
+2. Select your worker
+3. Go to Settings → Variables
+4. Add `GOOGLE_ANALYTICS_ID` with your GA4 tracking ID
+
+**How it works:**
+- The HTML contains placeholder `{{GOOGLE_ANALYTICS_ID}}`
+- Worker replaces placeholder with actual GA4 tracking ID
+- If no environment variable is set, analytics are disabled
+- Your tracking ID stays private while code remains open source
+
 #### **Option B: GitHub-First Deployment**
 
 **Step 1: Connect GitHub Repository**

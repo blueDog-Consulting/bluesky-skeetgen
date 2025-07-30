@@ -50,6 +50,23 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Google Analytics (GA4) - Configure via environment variable -->
+    <script>
+      // Check if Google Analytics ID is available (set via Cloudflare Workers environment variable)
+      const gaId = '{{GOOGLE_ANALYTICS_ID}}';
+      if (gaId && gaId !== '{{GOOGLE_ANALYTICS_ID}}') {
+        // Google Analytics 4 (GA4) tracking code
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', gaId, {
+          page_title: document.title,
+          page_location: window.location.href
+        });
+      }
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{GOOGLE_ANALYTICS_ID}}" id="ga-script"></script>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
     <div class="min-h-screen">

@@ -5,13 +5,19 @@ All notable changes to the Bluesky Post Image Generator project will be document
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.0] - 2025-01-XX
+## [1.2.0] - 2025-07-30
 
 ### Enhanced
 - **🔄 Workflow Management**: Improved seamless switching between workflows with better state management
 - **💾 Content Preservation**: Enhanced preservation of uploaded images and form data across workflow switches
 - **🎯 Smart Defaults**: Improved default content preservation across all workflows
 - **🧹 Code Cleanup**: Removed all unnecessary debug logs and cleaned up codebase for production
+
+### Added
+- **📊 Google Analytics Integration**: Optional GA4 tracking via HTML template replacement
+- **🔒 Secure Configuration**: Analytics tracking ID stored securely in Cloudflare Workers environment variables
+- **🌐 Privacy-First Design**: No tracking by default, analytics only when environment variable is set
+- **🧹 Simplified Architecture**: Removed complex HTML injection in favor of simple template replacement
 
 ### Technical Improvements
 - **State Management**: Enhanced workflow state tracking and preservation
@@ -24,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Content Preservation**: Fixed default content preservation when switching workflows
 - **Debug Cleanup**: Removed all unnecessary console.log statements for production readiness
 
-## [1.0.0] - 2025-01-XX
+## [1.0.0] - 2025-07-29
 
 ### Added
 - **🎨 Generate New Post Image Workflow**: Complete custom post creation with user profiles, content, images, and engagement metrics
@@ -72,7 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Technical Architecture**: Detailed system overview
 - **Contributing Guidelines**: Clear development setup and contribution process
 
-## [0.9.0] - 2024-12-XX
+## [0.0.1] - 2025-07-29
 
 ### Added
 - Initial project setup with basic post generation
@@ -90,9 +96,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
+- **v1.2.0**: Simplified Google Analytics integration with HTML template replacement and privacy-first design
 - **v1.1.0**: Enhanced workflow management with seamless switching, content preservation, and cleaned codebase
 - **v1.0.0**: Complete feature set with workflow switching, real API integration, and professional UX
-- **v0.9.0**: Initial prototype with basic post generation capabilities
+- **v0.0.1**: Initial prototype with basic post generation capabilities
 
 ## Future Roadmap
 

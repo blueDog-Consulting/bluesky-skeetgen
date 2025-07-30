@@ -12,3 +12,7 @@ directory = "./site"
 [observability]
 enabled = true
 head_sampling_rate = 1 # optional. default = 1.
+
+# Environment variables (set these in Cloudflare dashboard or via wrangler)
+[vars]
+# GOOGLE_ANALYTICS_ID = "G-XXXXXXXXXX" # Uncomment and set your GA4 tracking ID

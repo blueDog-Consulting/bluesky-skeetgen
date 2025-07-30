@@ -6,7 +6,7 @@ A free, open-source tool for creating realistic Bluesky post mockups and generat
 
 Use it at https://skeetgen.bluedog.dev
 
-[![Version](https://img.shields.io/badge/Version-v1.1.0-blue?style=for-the-badge)](https://github.com/bluedog-consulting/bluesky-skeetgen/releases)
+[![Version](https://img.shields.io/badge/Version-v1.2.0-blue?style=for-the-badge)](https://github.com/bluedog-consulting/bluesky-skeetgen/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![GitHub Actions](https://img.shields.io/github/actions/workflow/status/bluedog-consulting/bluesky-skeetgen/deploy.yml?branch=main&style=for-the-badge&logo=github-actions)](https://github.com/bluedog-consulting/bluesky-skeetgen/actions)
 [![Deploy to Cloudflare Workers](https://img.shields.io/badge/Deploy%20to-Cloudflare%20Workers-orange?style=for-the-badge&logo=cloudflare)](https://deploy.workers.cloudflare.com/?url=https://github.com/bluedog-consulting/bluesky-skeetgen)
@@ -117,13 +117,21 @@ Use it at https://skeetgen.bluedog.dev
    npx wrangler deploy
    ```
 
-2. **Your app will be available** at `https://bluesky-skeetgen.your-subdomain.workers.dev`
+2. **Configure Google Analytics (Optional)**
+   ```bash
+   # Set your GA4 tracking ID
+   wrangler secret put GOOGLE_ANALYTICS_ID
+   # Enter your tracking ID when prompted (e.g., G-XXXXXXXXXX)
+   ```
 
-3. **Features included**:
+3. **Your app will be available** at `https://bluesky-skeetgen.your-subdomain.workers.dev`
+
+4. **Features included**:
    - Static site hosting
    - Real Bluesky API integration (using [api.bsky.app](https://api.bsky.app))
    - No CORS issues (everything on same domain)
    - Avatar proxy for Bluesky CDN images
+   - Optional Google Analytics integration
 
 #### Other Hosting Options
 
@@ -240,6 +248,13 @@ bluesky-skeetgen/
 - **Export Time**: 2-5 seconds depending on content
 - **API Response**: < 500ms for Bluesky API calls (via [api.bsky.app](https://api.bsky.app))
 - **Edge Computing**: Global CDN for fast worldwide access (if using Cloudflare - YMMV with other providers)
+
+### Analytics & Privacy
+
+- **Google Analytics**: Optional GA4 integration via HTML template replacement
+- **Privacy-First**: No tracking by default, analytics only when environment variable is set
+- **Open Source**: All tracking code is visible in HTML, environment variable keeps ID private
+- **GDPR Compliant**: Analytics can be disabled by not setting the environment variable
 
 ## Contributing
 
