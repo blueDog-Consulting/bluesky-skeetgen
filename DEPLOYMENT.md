@@ -48,8 +48,8 @@ wrangler secret put GOOGLE_ANALYTICS_ID
 4. Add `GOOGLE_ANALYTICS_ID` with your GA4 tracking ID
 
 **How it works:**
-- The HTML contains placeholder `{{GOOGLE_ANALYTICS_ID}}`
-- Worker replaces placeholder with actual GA4 tracking ID
+- HTML fetches GA configuration from `/api/ga-config` endpoint
+- Worker returns GA4 tracking ID from environment variable
 - If no environment variable is set, analytics are disabled
 - Your tracking ID stays private while code remains open source
 

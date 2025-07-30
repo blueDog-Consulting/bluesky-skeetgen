@@ -251,7 +251,7 @@ bluesky-skeetgen/
 
 ### Analytics & Privacy
 
-- **Google Analytics**: Optional GA4 integration via HTML template replacement
+- **Google Analytics**: Optional GA4 integration via client-side API configuration
 - **Privacy-First**: No tracking by default, analytics only when environment variable is set
 - **Open Source**: All tracking code is visible in HTML, environment variable keeps ID private
 - **GDPR Compliant**: Analytics can be disabled by not setting the environment variable

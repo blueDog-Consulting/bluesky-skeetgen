@@ -1,7 +1,6 @@
 // Cloudflare Worker for Bluesky Post Generator - handles both static assets and API routes
 export default {
   async fetch(request, env, ctx) {
-    console.log('Worker called for path:', request.url);
     const url = new URL(request.url);
     const path = url.pathname;
 
@@ -24,15 +23,12 @@ export default {
     };
 
     try {
-      console.log('Processing request for path:', path);
       // API Routes
       if (path.startsWith('/api/')) {
-        console.log('Handling API route');
-        return await handleApiRoutes(request, url, corsHeaders);
+        return await handleApiRoutes(request, url, corsHeaders, env);
       }
 
       // Static Assets - serve from site directory
-      console.log('Handling static asset');
       return await serveStaticAssets(request, url, corsHeaders);
 
     } catch (error) {
@@ -46,7 +42,7 @@ export default {
 };
 
 // Handle API routes
-async function handleApiRoutes(request, url, corsHeaders) {
+async function handleApiRoutes(request, url, corsHeaders, env) {
   const path = url.pathname;
 
   // Route: Get posts by handle

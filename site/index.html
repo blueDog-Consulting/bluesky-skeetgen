@@ -51,7 +51,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="css/styles.css">
 
-    <!-- Google Analytics (GA4) - Configure via environment variable -->
+            <!-- Google Analytics (GA4) - Configure via environment variable -->
     <script>
       // Fetch Google Analytics configuration from worker
       fetch('/api/ga-config')
@@ -76,7 +76,7 @@
           }
         })
         .catch(error => {
-          console.log('Google Analytics not configured or error loading config');
+          // Silently handle errors - GA not configured
         });
     </script>
 </head>
