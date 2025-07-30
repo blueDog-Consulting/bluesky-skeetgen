@@ -41,7 +41,7 @@ Use it at https://skeetgen.bluedog.dev
 
 ## Features
 
-### 🎨 **Two Workflow Options with Seamless Switching**
+### 🎨 **Two Ways to Generate an Image**
 
 #### **🎨 Generate New Post Image**
 - **User Profile**: Customize display name, handle, and avatar
