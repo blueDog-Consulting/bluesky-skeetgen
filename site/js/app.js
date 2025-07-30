@@ -2,6 +2,8 @@
 class BlueskyPostGenerator {
     constructor() {
         this.isDarkMode = false;
+        this.currentWorkflow = 'initial';
+        this.isSwitchingWorkflow = false;
         this.init();
     }
 
@@ -32,13 +34,45 @@ class BlueskyPostGenerator {
 
         if (backToChoiceBtn) {
             backToChoiceBtn.addEventListener('click', () => {
-                this.showInitialChoice();
+                if (confirm('Starting over will reset your current selections. Do you want to continue?')) {
+                    this.showInitialChoice();
+                    // Reinitialize default values when going back to initial choice
+                    setTimeout(() => {
+                        this.initializeDefaultValues();
+                    }, 100);
+                }
             });
         }
 
         if (backToChoiceBtn2) {
             backToChoiceBtn2.addEventListener('click', () => {
-                this.showInitialChoice();
+                // Prevent back button clicks during workflow switches or if we're not in the create-existing workflow
+                if (this.isSwitchingWorkflow || this.currentWorkflow !== 'create-existing') {
+                    return;
+                }
+                if (confirm('Starting over will reset your current selections. Do you want to continue?')) {
+                    this.showInitialChoice();
+                    // Reinitialize default values when going back to initial choice
+                    setTimeout(() => {
+                        this.initializeDefaultValues();
+                    }, 100);
+                }
+            });
+        }
+
+        // Add event listener for the "Generate New" button in the create-existing section
+        const switchToGenerateNewBtn = document.getElementById('switch-to-generate-new');
+        if (switchToGenerateNewBtn) {
+            switchToGenerateNewBtn.addEventListener('click', () => {
+                this.showGenerateNewSection();
+            });
+        }
+
+        // Add event listener for the "Create from Existing" button in the generate-new section
+        const switchToCreateExistingBtn = document.getElementById('switch-to-create-existing');
+        if (switchToCreateExistingBtn) {
+            switchToCreateExistingBtn.addEventListener('click', () => {
+                this.showCreateFromExistingSection();
             });
         }
 
@@ -295,13 +329,8 @@ class BlueskyPostGenerator {
     }
 
     // Workflow navigation methods
-    showGenerateNewSection() {
-        // Check if we're currently in the existing post workflow
-        const createFromExistingSection = document.getElementById('create-from-existing-section');
-        const isInExistingWorkflow = createFromExistingSection && !createFromExistingSection.classList.contains('hidden');
-
-        if (isInExistingWorkflow) {
-            // Show confirmation dialog
+            showGenerateNewSection() {
+        if (this.currentWorkflow === 'create-existing') {
             if (confirm('Switching to "Generate New Post Image" will reset your current selections. Do you want to continue?')) {
                 this.resetToGenerateNew();
             }
@@ -310,13 +339,50 @@ class BlueskyPostGenerator {
         }
     }
 
-    showCreateFromExistingSection() {
-        // Check if we're currently in the generate new workflow
-        const generateNewSection = document.getElementById('generate-new-section');
-        const isInGenerateNewWorkflow = generateNewSection && !generateNewSection.classList.contains('hidden');
+        resetToGenerateNew() {
+        this.isSwitchingWorkflow = true;
 
-        if (isInGenerateNewWorkflow) {
-            // Show confirmation dialog
+        const initialChoice = document.getElementById('initial-choice');
+        const generateNewSection = document.getElementById('generate-new-section');
+        const createFromExistingSection = document.getElementById('create-from-existing-section');
+
+        if (initialChoice && generateNewSection && createFromExistingSection) {
+            // Temporarily disable the back button
+            const backToChoiceBtn = document.getElementById('back-to-choice');
+            if (backToChoiceBtn) {
+                backToChoiceBtn.style.pointerEvents = 'none';
+                backToChoiceBtn.style.opacity = '0.5';
+            }
+
+            // Hide all sections
+            initialChoice.classList.add('hidden');
+            createFromExistingSection.classList.add('hidden');
+
+            // Show generate new section
+            generateNewSection.classList.remove('hidden');
+
+            // Update workflow state
+            this.currentWorkflow = 'generate-new';
+
+            // Reset form fields but preserve uploaded images
+            this.resetGenerateNewFormPreserveImages();
+
+            // Update preview with fresh data
+            this.updatePreview();
+
+            // Re-enable the back button and clear the switching flag after a delay
+            setTimeout(() => {
+                this.isSwitchingWorkflow = false;
+                if (backToChoiceBtn) {
+                    backToChoiceBtn.style.pointerEvents = 'auto';
+                    backToChoiceBtn.style.opacity = '1';
+                }
+            }, 500);
+        }
+    }
+
+    showCreateFromExistingSection() {
+        if (this.currentWorkflow === 'generate-new') {
             if (confirm('Switching to "Create from Existing Post" will reset your current selections. Do you want to continue?')) {
                 this.resetToCreateFromExisting();
             }
@@ -325,39 +391,30 @@ class BlueskyPostGenerator {
         }
     }
 
-    resetToGenerateNew() {
+            resetToCreateFromExisting() {
+        this.isSwitchingWorkflow = true;
+
         const initialChoice = document.getElementById('initial-choice');
         const generateNewSection = document.getElementById('generate-new-section');
         const createFromExistingSection = document.getElementById('create-from-existing-section');
 
         if (initialChoice && generateNewSection && createFromExistingSection) {
-            // Hide all sections
-            initialChoice.classList.add('hidden');
-            createFromExistingSection.classList.add('hidden');
+            // Temporarily disable the back button
+            const backToChoiceBtn2 = document.getElementById('back-to-choice-2');
+            if (backToChoiceBtn2) {
+                backToChoiceBtn2.style.pointerEvents = 'none';
+                backToChoiceBtn2.style.opacity = '0.5';
+            }
 
-            // Show generate new section
-            generateNewSection.classList.remove('hidden');
-
-            // Reset form fields
-            this.resetGenerateNewForm();
-
-            // Update preview with fresh data
-            this.updatePreview();
-        }
-    }
-
-    resetToCreateFromExisting() {
-        const initialChoice = document.getElementById('initial-choice');
-        const generateNewSection = document.getElementById('generate-new-section');
-        const createFromExistingSection = document.getElementById('create-from-existing-section');
-
-        if (initialChoice && generateNewSection && createFromExistingSection) {
             // Hide all sections
             initialChoice.classList.add('hidden');
             generateNewSection.classList.add('hidden');
 
             // Show create from existing section
             createFromExistingSection.classList.remove('hidden');
+
+            // Update workflow state
+            this.currentWorkflow = 'create-existing';
 
             // Reset form fields
             this.resetCreateFromExistingForm();
@@ -367,11 +424,23 @@ class BlueskyPostGenerator {
                 window.postFetcher.currentPostData = null;
             }
 
-            // Clear preview
-            const previewContainer = document.getElementById('post-preview');
-            if (previewContainer) {
-                previewContainer.innerHTML = '';
+            // Set default content for the create-existing workflow
+            const postContent = document.getElementById('post-content');
+            if (postContent) {
+                postContent.value = 'Just testing out this awesome Bluesky post generator! 🚀';
             }
+
+            // Update preview with default content
+            this.updatePreview();
+
+            // Re-enable the back button and clear the switching flag after a delay
+            setTimeout(() => {
+                this.isSwitchingWorkflow = false;
+                if (backToChoiceBtn2) {
+                    backToChoiceBtn2.style.pointerEvents = 'auto';
+                    backToChoiceBtn2.style.opacity = '1';
+                }
+            }, 500);
         }
     }
 
@@ -411,6 +480,57 @@ class BlueskyPostGenerator {
         const imagePreview = document.getElementById('image-preview');
         if (imagePreview) {
             imagePreview.innerHTML = '';
+        }
+    }
+
+    resetGenerateNewFormPreserveImages() {
+        // Reset all form fields to default values but preserve uploaded images
+        const fields = {
+            'display-name': 'John Doe',
+            'handle': '@johndoe.bsky.social',
+            'post-content': 'Just testing out this awesome Bluesky post generator! 🚀',
+            'reposts': '12',
+            'likes': '42',
+            'replies': '8',
+            'post-date': this.getCurrentDate(),
+            'post-time': this.getCurrentTime()
+        };
+
+        Object.keys(fields).forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.value = fields[id];
+            }
+        });
+
+        // Reset post type to regular post
+        const regularPostRadio = document.querySelector('input[name="post-type"][value="post"]');
+        if (regularPostRadio) {
+            regularPostRadio.checked = true;
+        }
+
+        // Reset theme to light
+        const lightThemeRadio = document.querySelector('input[name="export-theme"][value="light"]');
+        if (lightThemeRadio) {
+            lightThemeRadio.checked = true;
+        }
+
+        // Note: We don't clear uploaded images in this method
+        // Also preserve the post image upload state
+        const postImagePreview = document.getElementById('post-image-preview');
+        const imageUploadSection = document.getElementById('image-upload-section');
+        const addImageBtn = document.getElementById('add-image-btn');
+
+        // If there's a post image, keep the upload section visible
+        if (postImagePreview && postImagePreview.src && postImagePreview.src !== '') {
+            if (imageUploadSection) {
+                imageUploadSection.classList.remove('hidden');
+            }
+            if (addImageBtn) {
+                addImageBtn.textContent = 'Remove Image';
+                addImageBtn.classList.add('text-red-500', 'hover:text-red-600');
+                addImageBtn.classList.remove('text-blue-500', 'hover:text-blue-600');
+            }
         }
     }
 
@@ -459,6 +579,9 @@ class BlueskyPostGenerator {
             initialChoice.classList.remove('hidden');
             generateNewSection.classList.add('hidden');
             createFromExistingSection.classList.add('hidden');
+
+            // Update workflow state
+            this.currentWorkflow = 'initial';
         }
     }
 

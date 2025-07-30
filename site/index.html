@@ -34,7 +34,7 @@
     <!-- Additional Meta Tags -->
     <meta name="theme-color" content="#0085FF">
     <meta name="msapplication-TileColor" content="#0085FF">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Bluesky Post Generator">
 
@@ -106,7 +106,10 @@
                         <div id="generate-new-section" class="hidden">
                             <div class="flex items-center justify-between mb-6">
                                 <h3 class="text-md font-medium text-gray-900 dark:text-white">Customize Your Post</h3>
-                                <button id="back-to-choice" class="text-sm text-blue-500 hover:text-blue-600">← Back to choice</button>
+                                <div class="flex space-x-3">
+                                    <button id="switch-to-create-existing" class="text-sm text-blue-500 hover:text-blue-600">📱 Create from Existing</button>
+                                    <button id="back-to-choice" class="text-sm text-blue-500 hover:text-blue-600">🔄 Start over</button>
+                                </div>
                             </div>
 
                             <!-- Post Type -->
@@ -241,7 +244,10 @@
                         <div id="create-from-existing-section" class="hidden">
                             <div class="flex items-center justify-between mb-6">
                                 <h3 class="text-md font-medium text-gray-900 dark:text-white">Create from Existing Post</h3>
-                                <button id="back-to-choice-2" class="text-sm text-blue-500 hover:text-blue-600">← Back to choice</button>
+                                <div class="flex space-x-3">
+                                    <button id="switch-to-generate-new" class="text-sm text-blue-500 hover:text-blue-600">🎨 Generate New</button>
+                                    <button id="back-to-choice-2" class="text-sm text-blue-500 hover:text-blue-600">🔄 Start over</button>
+                                </div>
                             </div>
 
                             <!-- Social Handle Input -->
